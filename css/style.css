@@ -68,29 +68,53 @@ body {
   margin: 0 auto;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+}
+
 /* Кнопки */
 
 .btn {
-  margin: 10px;
-  padding: 10px 20px;
+  margin: 0;
+  padding: 12.5px 26.5px;
   outline: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 18px;
-  color: #075e07;
-  background-color: #9fd29f;
-  border: 3px solid #075e07;
-  border-radius: 7px;
+  font-size: 14px;
+  color: var(--firm);
+  background-color: transparent;
+  border: 1px solid var(--firm);
+  border-radius: 0;
   position: relative;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.add-client-btn svg {
+  margin-right: 2px;
+}
+
+.add-client-btn path {
+  transition: fill 0.3s ease-in-out;
 }
 
 .btn:hover {
-  background-color: #caebca;
+  background-color: #B89EFF;
+  color: #FFF;
+}
+
+.add-client-btn:hover path {
+  fill: #FFF;
 }
 
 .btn:active {
-  background-color: #469846;
+  background-color: #8052FF;
 }
 
 .btn-smal {
@@ -112,6 +136,13 @@ body {
   background-color: #ca6a47;
 }
 
+.download-picture {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
 /* Модальное окно */
 
 .modal-parent {
@@ -128,23 +159,24 @@ body {
 
 .modal-wrapper {
   margin: auto;
-  width: 90%;
-  max-width: 500px;
+  max-width: 450px;
+  min-height: 400px;
 }
 
 .modal {
   margin: 30px 0;
   width: 100%;
-  border-radius: 5px;
-  padding: 40px 20px;
+  padding: 25px 30px;
+  border-radius: 0;
   background-color: #fff;
 }
 
 .modal__title {
   margin: 0;
-  margin-bottom: 30px;
-  text-align: center;
-  color: #075e07;
+  margin-bottom: 15px;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .filter {
@@ -167,7 +199,11 @@ body {
   display: block;
   margin-bottom: 3px;
   text-align: left;
-  color: #075e07;
+  color: var(--txt_grey);
+}
+
+.form__text span{
+  color: var(--firm);
 }
 
 .form__input {
@@ -192,6 +228,7 @@ body {
 
 table {
   margin: 0 auto;
+  margin-bottom: 40px;
   width: 100%;
 }
 
