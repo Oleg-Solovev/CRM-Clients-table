@@ -88,11 +88,15 @@ body {
   cursor: pointer;
   font-weight: 600;
   font-size: 14px;
-  color: var(--firm);
   background-color: transparent;
-  border: 1px solid var(--firm);
+  border: 0;
   border-radius: 0;
   position: relative;
+}
+
+.add-client-btn {
+  color: var(--firm);
+  border: 1px solid var(--firm);
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
@@ -104,7 +108,9 @@ body {
   transition: fill 0.3s ease-in-out;
 }
 
-.btn:hover {
+.add-client-btn:hover,
+.save-contact-btn:hover ,
+.delete-contact-btn:hover {
   background-color: #B89EFF;
   color: #FFF;
 }
@@ -113,27 +119,27 @@ body {
   fill: #FFF;
 }
 
-.btn:active {
+.add-client-btn:active,
+.save-contact-btn:active ,
+.delete-contact-btn:active {
   background-color: #8052FF;
 }
 
-.btn-smal {
-  font-size: 14px;
-  padding: 5px 10px;
+.add-contact-btn svg {
+  margin-right: 3px;
+  transform: translateY(3px);
 }
 
-.btn-reset {
-  color: #942b05;
-  border: 3px solid #bb3909;
-  background-color: #dc967d;
+.save-contact-btn,
+.delete-contact-btn {
+  color: #FFF;
+  background-color: var(--firm);
 }
 
-.btn-reset:hover {
-  background-color: #edb9a7;
-}
-
-.btn-reset:active {
-  background-color: #ca6a47;
+.delete-btn, 
+.cancel-contact-btn {
+  font-weight: 400;
+  text-decoration: underline;
 }
 
 .download-picture {
@@ -179,6 +185,11 @@ body {
   font-weight: 800;
 }
 
+.modal__title--delate {
+  margin: 0;
+  text-align: center;
+}
+
 .filter {
   margin: 10px;
 }
@@ -215,9 +226,23 @@ body {
   outline: 2px dashed #075e07;
 }
 
+.form__add-contact {
+  width: 100%;
+  background-color: var(--grey);
+}
+
 .modal-parent--open {
   opacity: 1;
   visibility: visible;
+}
+
+.form-btn-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-massage {
+  margin: 0;
 }
 
 .eror {
