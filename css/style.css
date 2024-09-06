@@ -79,6 +79,13 @@ body {
   overflow: hidden;
 }
 
+.download-picture {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
 /* Кнопки */
 
 .btn {
@@ -142,12 +149,14 @@ body {
   text-decoration: underline;
 }
 
-.download-picture {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
+.btn-change {
+  /* иконка фоном из файла */
 }
+
+.btn-reset {
+  /* иконка фоном из файла */
+}
+
 
 /* Модальное окно */
 
