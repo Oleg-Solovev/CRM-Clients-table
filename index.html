@@ -104,7 +104,7 @@
                         </svg>
                     </th>
                     <th class="table-text" id="tableContacts">Контакты</th>
-                    <th>Действия</th>
+                    <th class="table-text" id="tableActions">Действия</th>
                 </tr>
             </thead>
             <tbody class="tbody" id="tbody"></tbody>
@@ -172,7 +172,7 @@
     </div>
 
     <!-- модальное окно Новый клиент-->
-    <div class="form-new-client modal-parent" id="formNewClient">
+    <div class="form-new-client modal-parent modal-parent--open" id="formNewClient">
         <div class="modal-wrapper">
             <div class="modal">
                 <h2 class="modal__title">Новый клиент</h2>
@@ -210,7 +210,7 @@
                             Добавить контакт</button>
                     </div>
                     <div class="form-btn-box">
-                        <button class="btn save-contact-btn" id="saveContactBtn">Сохранить</button>
+                        <button class="btn save-client-btn" id="saveClientBtn">Сохранить</button>
                         <button class="btn cancel-contact-btn" id="cancelBtn">Отмена</button>
                     </div>
                 </form>
@@ -219,7 +219,7 @@
     </div>
 
     <!-- модальное окно Удалить клиента-->
-    <div class="form-delete-client modal-parent" id="formDeleteClient">
+    <div class="form-delete-client modal-parent visually-hidden" id="formDeleteClient">
         <div class="modal-wrapper">
             <div class="modal">
                 <form class="form" id="form" autocomplete="off">
