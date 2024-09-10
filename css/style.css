@@ -68,17 +68,6 @@ body {
   margin: 0 auto;
 }
 
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  border: 0;
-  padding: 0;
-  clip: rect(0, 0, 0, 0);
-  overflow: hidden;
-}
-
 .download-picture {
   display: block;
   position: absolute;
@@ -116,7 +105,7 @@ body {
 }
 
 .add-client-btn:hover,
-.save-contact-btn:hover ,
+.save-client-btn:hover ,
 .delete-contact-btn:hover {
   background-color: #B89EFF;
   color: #FFF;
@@ -127,7 +116,7 @@ body {
 }
 
 .add-client-btn:active,
-.save-contact-btn:active ,
+.save-client-btn:active ,
 .delete-contact-btn:active {
   background-color: #8052FF;
 }
@@ -137,7 +126,7 @@ body {
   transform: translateY(3px);
 }
 
-.save-contact-btn,
+.save-client-btn,
 .delete-contact-btn {
   color: #FFF;
   background-color: var(--firm);
@@ -166,15 +155,20 @@ body {
   z-index: 500;
   display: flex;
   overflow-y: auto;
-  background-color: rgba(0, 0, 0, .8);
   opacity: 0;
   visibility: hidden;
+  background-color: rgba(0, 0, 0, .8);
   transition: opacity .3s ease-in-out, visibility .3s ease-in-out;
+}
+
+.modal-parent--open {
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-wrapper {
   margin: auto;
-  max-width: 450px;
+  max-width: 600px;
   min-height: 400px;
 }
 
@@ -240,10 +234,7 @@ body {
   background-color: var(--grey);
 }
 
-.modal-parent--open {
-  opacity: 1;
-  visibility: visible;
-}
+
 
 .form-btn-box {
   display: flex;

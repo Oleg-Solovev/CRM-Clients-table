@@ -160,7 +160,7 @@ async function apiCRM() {
   }
 
   // Функция вывода одного пользователя в таблицу 
-  function createClientItem(clientObj, onDelete) {
+  function createClientItem(clientObj) {
     let clientTr = document.createElement("tr")
     let idTd = document.createElement("td")
     let fulNameTd = document.createElement("td")
@@ -192,7 +192,89 @@ async function apiCRM() {
     return clientTr
   }
 
+  // Функция отрисовки таблицы всех пользователей
+  function renderClientsList(arr) {
+    tbody.innerHTML = '';
+    arr.forEach(clientItem => {
+      tbody.append(createClientItem(clientItem));
+    })
+  }
 
+  // функция сортировки массива пользователей
+  function getSortClientsList(prop) {
+    const sortArr = [...clientsList];
+    sortArr.sort((a, b) => (!dir
+      ? a[prop] < b[prop]
+      : a[prop] > b[prop])
+      ? -1
+      : 0);
+    dir == true ? dir = false : dir = true;
+    // Отрисовка списка после сортировки
+    return renderClientsList(sortArr);
+  }
+
+  // Start. 
+
+  // первоначальный массив пользователей 
+  let clientsList = [];
+  // Проверка наличия данных на 
+  clientsList = await checkLocalServer();
+
+
+  // Создание статичных элементов html и загрузка интерактивных элементов в JS
+  const openFormBtn = document.getElementById('addClientBtn');
+  let filterRequest = document.getElementById('filterRequest');
+
+  // Загрузка модального окна "Новый клиент" в JS
+  const modalNewForm = document.getElementById('formNewClient');
+  const addNewBtn = document.getElementById('addContactBtn');
+  const saveClientBtn = document.getElementById('saveClientBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  let surnameNewInp = document.getElementById('newSurname');
+  let nameNewInp = document.getElementById('newName');
+  let lastnameNewInp = document.getElementById('newLastname');
+
+  // открытие модального окна "Новый клиент"
+  openFormBtn.addEventListener("click", function () {
+    modalNewForm.classList.add("modal-parent--open");
+    surnameNewInp.value = '';
+    nameNewInp.value = '';
+    lastnameNewInp.value = '';
+  })
+
+  //  Загрузка шапки и тела таблицы пользователей
+  const tbody = document.getElementById('tbody');
+  const tableID = document.getElementById('tableID');
+  const tableFIO = document.getElementById('tableFIO');
+  const tableDate = document.getElementById('tableDate');
+  const tableChanges = document.getElementById('tableChanges');
+  const tableContacts = document.getElementById('tableContacts');
+  const tableActions = document.getElementById('tableActions');
+
+  // Отрисовка таблицы пользователей
+  renderClientsList(clientsList);
+
+ // СОРТИРОВКА. События кликов на соответствующие колонки для сортировки
+ let dir = true;
+ tableID.addEventListener("click", function (event) {
+   if (event._isClick === true) return
+   getSortClientsList('id');
+ });
+
+ tableFIO.addEventListener("click", function (event) {
+   if (event._isClick === true) return
+   getSortClientsList('surname');
+ });
+
+ tableDate.addEventListener("click", function (event) {
+   if (event._isClick === true) return
+   getSortClientsList('createdAt');
+ });
+
+ tableChanges.addEventListener("click", function (event) {
+   if (event._isClick === true) return
+   getSortClientsList('updatedAt');
+ });
 
 
 
