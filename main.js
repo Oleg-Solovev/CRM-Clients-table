@@ -182,14 +182,27 @@ async function apiCRM() {
     createdAtTd.textContent = clientObj.createdAt;
     updatedAtTd.textContent = clientObj.updatedAt;
     contactsTd.textContent = clientObj.contacts;
-    actionTd.append(changeBtn, removeBtn);
     changeBtn.textContent = "Изменить";
     changeBtn.classList.add('btn', 'btn-change');
     removeBtn.textContent = "Удалить";
     removeBtn.classList.add('btn', 'btn-reset');
+    actionTd.append(changeBtn, removeBtn);
+
+    // открытие модального окна "Изменить данные"
+    changeBtn.addEventListener("click", function () {
+      modalChangeForm.classList.add("modal-parent--open");
+      surnameChangeInp.value = clientObj.surname.value;
+      nameChangeInp.value = clientObj.name.value;
+      lastnameChangeInp.value = clientObj.lastname.value;
+    })
+
+    // открытие модального окна "Удалить клиента"
+    removeBtn.addEventListener("click", function () {
+      modalDeleteForm.classList.add("modal-parent--open");
+    })
 
     clientTr.append(idTd, fulNameTd, createdAtTd, updatedAtTd, contactsTd, actionTd)
-    return clientTr
+    return clientTr;
   }
 
   // Функция отрисовки таблицы всех пользователей
@@ -228,7 +241,7 @@ async function apiCRM() {
   // Загрузка модального окна "Новый клиент" в JS
   const modalNewForm = document.getElementById('formNewClient');
   const addNewBtn = document.getElementById('addContactBtn');
-  const saveClientBtn = document.getElementById('saveClientBtn');
+  const saveNewClientBtn = document.getElementById('saveNewClientBtn');
   const cancelBtn = document.getElementById('cancelBtn');
   let surnameNewInp = document.getElementById('newSurname');
   let nameNewInp = document.getElementById('newName');
@@ -242,6 +255,69 @@ async function apiCRM() {
     lastnameNewInp.value = '';
   })
 
+  // закрытие модального окна "Новый клиент"
+  modalNewForm.querySelector(".modal").addEventListener("click", function (event) {
+    event._isClick = true
+  })
+  modalNewForm.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    modalNewForm.classList.remove("modal-parent--open")
+  })
+
+  // закрытие модального окна "Новый клиент" по кнопке Esc
+  window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      modalNewForm.classList.remove("modal-parent--open")
+    }
+  });
+
+
+  // Загрузка модального окна "Изменить данные" в JS
+  const modalChangeForm = document.getElementById('form-change');
+  const addChangeBtn = document.getElementById('addChangeContactBtn');
+  const saveChangeClientBtn = document.getElementById('saveChangeContactBtn');
+  const deleteChangeBtn = document.getElementById('deleteChangeBtn');
+  let surnameChangeInp = document.getElementById('changeSurname');
+  let nameChangeInp = document.getElementById('changeName');
+  let lastnameChangeInp = document.getElementById('changeLastname');
+
+  // закрытие модального окна "Изменить данные"
+  modalChangeForm.querySelector(".modal").addEventListener("click", function (event) {
+    event._isClick = true
+  })
+  modalChangeForm.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    modalChangeForm.classList.remove("modal-parent--open")
+  })
+
+  // закрытие модального окна "Изменить данные" по кнопке Esc
+  window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      modalChangeForm.classList.remove("modal-parent--open")
+    }
+  });
+
+
+  // Загрузка модального окна "Удалить клиента" в JS
+  const modalDeleteForm = document.getElementById('form-delete-client');
+  const deleteContactBtn = document.getElementById('deleteContactBtn');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+  // закрытие модального окна "Удалить клиента"
+  modalDeleteForm.querySelector(".modal").addEventListener("click", function (event) {
+    event._isClick = true
+  })
+  modalDeleteForm.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    modalDeleteForm.classList.remove("modal-parent--open")
+  })
+  window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      modalDeleteForm.classList.remove("modal-parent--open")
+    }
+  });
+
+
   //  Загрузка шапки и тела таблицы пользователей
   const tbody = document.getElementById('tbody');
   const tableID = document.getElementById('tableID');
@@ -254,27 +330,27 @@ async function apiCRM() {
   // Отрисовка таблицы пользователей
   renderClientsList(clientsList);
 
- // СОРТИРОВКА. События кликов на соответствующие колонки для сортировки
- let dir = true;
- tableID.addEventListener("click", function (event) {
-   if (event._isClick === true) return
-   getSortClientsList('id');
- });
+  // СОРТИРОВКА. События кликов на соответствующие колонки для сортировки
+  let dir = true;
+  tableID.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    getSortClientsList('id');
+  });
 
- tableFIO.addEventListener("click", function (event) {
-   if (event._isClick === true) return
-   getSortClientsList('surname');
- });
+  tableFIO.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    getSortClientsList('surname');
+  });
 
- tableDate.addEventListener("click", function (event) {
-   if (event._isClick === true) return
-   getSortClientsList('createdAt');
- });
+  tableDate.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    getSortClientsList('createdAt');
+  });
 
- tableChanges.addEventListener("click", function (event) {
-   if (event._isClick === true) return
-   getSortClientsList('updatedAt');
- });
+  tableChanges.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    getSortClientsList('updatedAt');
+  });
 
 
 

@@ -124,8 +124,8 @@
             Добавить клиента</button>
     </section>
 
-    <!-- модальное окно Изменить данные-->
-    <div class="form-change modal-parent" id="formChange">
+    <!-- модальное окно "Изменить данные" -->
+    <div class="form-change modal-parent " id="formChange">
         <div class="modal-wrapper">
             <div class="modal">
                 <h2 class="modal__title">Изменить данные</h2>
@@ -146,7 +146,7 @@
                             autocomplete="off" required>
                     </label>
                     <div class="form__add-contact">
-                        <button class="btn add-contact-btn" id="addContactBtn">
+                        <button class="btn add-contact-btn" id="addChangeContactBtn">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_224_3502)">
@@ -163,8 +163,8 @@
                             Добавить контакт</button>
                     </div>
                     <div class="form-btn-box">
-                        <button class="btn save-contact-btn" id="saveContactBtn">Сохранить</button>
-                        <button class="btn delete-btn" id="deleteBtn">Удалить клиента</button>
+                        <button class="btn save-client-btn" id="saveChangeContactBtn">Сохранить</button>
+                        <button class="btn delete-btn" id="deleteChangeBtn">Удалить клиента</button>
                     </div>
                 </form>
             </div>
@@ -172,7 +172,7 @@
     </div>
 
     <!-- модальное окно Новый клиент-->
-    <div class="form-new-client modal-parent modal-parent--open" id="formNewClient">
+    <div class="form-new-client modal-parent " id="formNewClient">
         <div class="modal-wrapper">
             <div class="modal">
                 <h2 class="modal__title">Новый клиент</h2>
@@ -210,7 +210,7 @@
                             Добавить контакт</button>
                     </div>
                     <div class="form-btn-box">
-                        <button class="btn save-client-btn" id="saveClientBtn">Сохранить</button>
+                        <button class="btn save-client-btn" id="saveNewClientBtn">Сохранить</button>
                         <button class="btn cancel-contact-btn" id="cancelBtn">Отмена</button>
                     </div>
                 </form>
@@ -218,16 +218,16 @@
         </div>
     </div>
 
-    <!-- модальное окно Удалить клиента-->
-    <div class="form-delete-client modal-parent visually-hidden" id="formDeleteClient">
+    <!-- модальное окно "Удалить клиента" -->
+    <div class="form-delete-client modal-parent modal-parent--open" id="formDeleteClient">
         <div class="modal-wrapper">
             <div class="modal">
                 <form class="form" id="form" autocomplete="off">
                     <h2 class="modal__title modal__title--delate">Удалить клиента</h2>
                     <p class="text-massage">Вы действительно хотите удалить данного клиента?</p>
                     <div class="form-btn-box">
-                        <button class="btn delete-contact-btn" id="deleteContactBtn">Удалить</button>
-                        <button class="btn cancel-contact-btn" id="cancelBtn">Отмена</button>
+                        <button class="btn save-client-btn" id="deleteContactBtn">Удалить</button>
+                        <button class="btn cancel-contact-btn" id="cancelDeleteBtn">Отмена</button>
                     </div>
                 </form>
             </div>
