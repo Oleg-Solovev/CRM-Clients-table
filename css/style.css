@@ -75,6 +75,11 @@ body {
   left: 50%;
 }
 
+.visually-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
 /* Кнопки */
 
 .btn {
@@ -105,7 +110,7 @@ body {
 }
 
 .add-client-btn:hover,
-.save-client-btn:hover ,
+.save-client-btn:hover,
 .delete-contact-btn:hover {
   background-color: #B89EFF;
   color: #FFF;
@@ -116,7 +121,7 @@ body {
 }
 
 .add-client-btn:active,
-.save-client-btn:active ,
+.save-client-btn:active,
 .delete-contact-btn:active {
   background-color: #8052FF;
 }
@@ -132,18 +137,26 @@ body {
   background-color: var(--firm);
 }
 
-.delete-btn, 
+.delete-btn,
 .cancel-contact-btn {
   font-weight: 400;
   text-decoration: underline;
 }
 
+.btn-box {
+  display: flex;
+}
+
 .btn-change {
-  /* иконка фоном из файла */
+  background-image: url(../img/btn-change.svg);
+  background-position: 10px 13px;
+  background-repeat: no-repeat;
 }
 
 .btn-reset {
-  /* иконка фоном из файла */
+  background-image: url(../img/btn-reset.svg);
+  background-position: 10px 13px;
+  background-repeat: no-repeat;
 }
 
 
@@ -216,7 +229,7 @@ body {
   color: var(--txt_grey);
 }
 
-.form__text span{
+.form__text span {
   color: var(--firm);
 }
 
@@ -233,8 +246,6 @@ body {
   width: 100%;
   background-color: var(--grey);
 }
-
-
 
 .form-btn-box {
   display: flex;
@@ -265,9 +276,9 @@ th {
 
 th {
   border-collapse: collapse;
-  text-align: center;
   font-weight: 400;
   color: var(--txt_grey);
+  cursor: pointer;
 }
 
 .tbody {
@@ -280,18 +291,9 @@ th {
   margin-bottom: 20px;
 }
 
-.table-text {
+/* .table-text {
   cursor: pointer;
-  color: #B0B0B0;
-}
-
-.table-text:hover {
-  color: #B0B0B0;
-}
-
-.table-text:active {
-  background-color: #e0af32;
-}
+} */
 
 .error .form__field {
   border-color: red;

@@ -12,7 +12,7 @@ async function apiCRM() {
         {
           name: 'Олег',
           surname: 'Соловьёв',
-          lastname: 'Валерьевич',
+          lastName: 'Валерьевич',
           contacts: [
             {
               type: 'Телефон',
@@ -35,7 +35,7 @@ async function apiCRM() {
         {
           name: 'Павел',
           surname: 'Балов',
-          lastname: 'Сергеевич',
+          lastName: 'Сергеевич',
           contacts: [
             {
               type: 'Телефон',
@@ -54,7 +54,7 @@ async function apiCRM() {
         {
           name: 'Вячеслав',
           surname: 'Иванов',
-          lastname: 'Павлович',
+          lastName: 'Павлович',
           contacts: [
             {
               type: 'Телефон',
@@ -107,9 +107,6 @@ async function apiCRM() {
 
   //  Функция удаления пользователя на сервере
   async function deleteFromLocalServer(id, element) {
-    if (!confirm('Вы уверены?')) {
-      return;
-    }
     element.remove();
     const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
       method: 'DELETE'
@@ -161,31 +158,28 @@ async function apiCRM() {
 
   // Функция вывода одного пользователя в таблицу 
   function createClientItem(clientObj) {
-    let clientTr = document.createElement("tr")
-    let idTd = document.createElement("td")
-    let fulNameTd = document.createElement("td")
-    let createdAtTd = document.createElement("td")
-    let updatedAtTd = document.createElement("td")
-    let contactsTd = document.createElement("td")
-    let actionTd = document.createElement("td")
-    let changeBtn = document.createElement("button")
-    let removeBtn = document.createElement("button")
+    const clientTr = document.createElement("tr");
+    const idTd = document.createElement("td");
+    const fulNameTd = document.createElement("td");
+    const createdAtTd = document.createElement("td");
+    const updatedAtTd = document.createElement("td");
+    const contactsTd = document.createElement("td");
+    const actionTd = document.createElement("td");
+    const changeBtn = document.createElement("button");
+    const removeBtn = document.createElement("button");
 
-    // Удаление строки с данными пользователя
-    removeBtn.onclick = function () {
-      deleteFromLocalServer(clientObj.id, clientTr);
-    }
 
     // Добавление данных из объекта в ячейки таблицы
     idTd.textContent = clientObj.id;
-    fulNameTd.textContent = `${clientObj.surname} ${clientObj.name} ${clientObj.lastname}`;
+    fulNameTd.textContent = `${clientObj.surname} ${clientObj.name} ${clientObj.lastName}`;
     createdAtTd.textContent = clientObj.createdAt;
     updatedAtTd.textContent = clientObj.updatedAt;
-    contactsTd.textContent = clientObj.contacts;
+    contactsTd.textContent = `${clientObj.contacts.forEach((el) => {el.type})}`;
     changeBtn.textContent = "Изменить";
     changeBtn.classList.add('btn', 'btn-change');
     removeBtn.textContent = "Удалить";
     removeBtn.classList.add('btn', 'btn-reset');
+    actionTd.classList.add('btn-box');
     actionTd.append(changeBtn, removeBtn);
 
     // открытие модального окна "Изменить данные"
@@ -193,7 +187,7 @@ async function apiCRM() {
       modalChangeForm.classList.add("modal-parent--open");
       surnameChangeInp.value = clientObj.surname.value;
       nameChangeInp.value = clientObj.name.value;
-      lastnameChangeInp.value = clientObj.lastname.value;
+      lastNameChangeInp.value = clientObj.lastName.value;
     })
 
     // открытие модального окна "Удалить клиента"
@@ -230,7 +224,7 @@ async function apiCRM() {
 
   // первоначальный массив пользователей 
   let clientsList = [];
-  // Проверка наличия данных на 
+  // Проверка наличия данных на сервере
   clientsList = await checkLocalServer();
 
 
@@ -245,21 +239,21 @@ async function apiCRM() {
   const cancelBtn = document.getElementById('cancelBtn');
   let surnameNewInp = document.getElementById('newSurname');
   let nameNewInp = document.getElementById('newName');
-  let lastnameNewInp = document.getElementById('newLastname');
+  let lastNameNewInp = document.getElementById('newLastname');
 
   // открытие модального окна "Новый клиент"
   openFormBtn.addEventListener("click", function () {
     modalNewForm.classList.add("modal-parent--open");
     surnameNewInp.value = '';
     nameNewInp.value = '';
-    lastnameNewInp.value = '';
+    lastNameNewInp.value = '';
   })
 
   // закрытие модального окна "Новый клиент"
   modalNewForm.querySelector(".modal").addEventListener("click", function (event) {
     event._isClick = true
   })
-  modalNewForm.addEventListener("click", function (event) {
+  cancelBtn.addEventListener("click", function (event) {
     if (event._isClick === true) return
     modalNewForm.classList.remove("modal-parent--open")
   })
@@ -271,15 +265,42 @@ async function apiCRM() {
     }
   });
 
+  // Кнопка отправки формы "Новый клиент" и проверка введённых данных
+  saveNewClientBtn.addEventListener("click", async e => {
+    e.preventDefault();
+
+    if (validationForm(modalNewForm)) {
+
+      let newClient = {
+        name: nameNewInp.value.trim(),
+        surname: surnameNewInp.value.trim(),
+        lastName: lastNameNewInp.value.trim(),
+      };
+
+      // Добавляем нового студента на сервер и в локальный массив, затем выводим список
+      await saveInLocalServer(newClient);
+      clientsList = await getFromLocalServer();
+      renderClientsList(clientsList);
+
+      // Закрытие модального окна "Новый клиент" 
+      modalNewForm.classList.remove("modal-parent--open")
+    }
+  })
 
   // Загрузка модального окна "Изменить данные" в JS
-  const modalChangeForm = document.getElementById('form-change');
+  const modalChangeForm = document.getElementById('formChange');
   const addChangeBtn = document.getElementById('addChangeContactBtn');
   const saveChangeClientBtn = document.getElementById('saveChangeContactBtn');
   const deleteChangeBtn = document.getElementById('deleteChangeBtn');
   let surnameChangeInp = document.getElementById('changeSurname');
   let nameChangeInp = document.getElementById('changeName');
-  let lastnameChangeInp = document.getElementById('changeLastname');
+  let lastNameChangeInp = document.getElementById('changeLastname');
+
+  // Удаление строки с данными пользователя
+  deleteChangeBtn.onclick = function () {
+    console.log('deleteFromLocalServer');
+    deleteFromLocalServer(clientObj.id, clientTr);
+  }
 
   // закрытие модального окна "Изменить данные"
   modalChangeForm.querySelector(".modal").addEventListener("click", function (event) {
@@ -299,9 +320,15 @@ async function apiCRM() {
 
 
   // Загрузка модального окна "Удалить клиента" в JS
-  const modalDeleteForm = document.getElementById('form-delete-client');
+  const modalDeleteForm = document.getElementById('formDeleteClient');
   const deleteContactBtn = document.getElementById('deleteContactBtn');
   const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+  // Удаление строки с данными пользователя
+  deleteContactBtn.onclick = function () {
+    console.log('deleteFromLocalServer');
+    deleteFromLocalServer(clientObj.id, clientTr);
+  }
 
   // закрытие модального окна "Удалить клиента"
   modalDeleteForm.querySelector(".modal").addEventListener("click", function (event) {
@@ -351,11 +378,6 @@ async function apiCRM() {
     if (event._isClick === true) return
     getSortClientsList('updatedAt');
   });
-
-
-
-
-
 
 
 
