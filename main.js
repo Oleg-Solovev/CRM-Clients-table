@@ -15,19 +15,19 @@ async function apiCRM() {
           lastName: 'Валерьевич',
           contacts: [
             {
-              type: 'Телефон',
+              type: 'phone',
               value: '+79032067266'
             },
             {
-              type: 'Email',
+              type: 'mail',
               value: 'so555@bk.ru'
             },
             {
-              type: 'Вконтакте',
+              type: 'vk',
               value: 'https://vk.com/id2003039'
             },
             {
-              type: 'Телеграм',
+              type: 'tg',
               value: 'https://t.me/Oleg7266'
             }
           ]
@@ -38,15 +38,15 @@ async function apiCRM() {
           lastName: 'Сергеевич',
           contacts: [
             {
-              type: 'Телефон',
+              type: 'phone',
               value: '+71234567890'
             },
             {
-              type: 'Email',
+              type: 'mail',
               value: 'abc@bk.ru'
             },
             {
-              type: 'Вконтакте',
+              type: 'vk',
               value: 'https://vk.com/id2003039'
             }
           ]
@@ -57,15 +57,15 @@ async function apiCRM() {
           lastName: 'Павлович',
           contacts: [
             {
-              type: 'Телефон',
+              type: 'phone',
               value: '+71234567890'
             },
             {
-              type: 'Email',
+              type: 'mail',
               value: 'abc@bk.ru'
             },
             {
-              type: 'Вконтакте',
+              type: 'vk',
               value: 'https://vk.com/id2003039'
             }
           ]
@@ -106,8 +106,7 @@ async function apiCRM() {
   }
 
   //  Функция удаления пользователя на сервере
-  async function deleteFromLocalServer(id, element) {
-    element.remove();
+  async function deleteFromLocalServer(id) {
     const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
       method: 'DELETE'
     });
@@ -156,6 +155,53 @@ async function apiCRM() {
     return accept
   }
 
+  // Функция, возвращая новый контакт
+  function getNewContact() {
+    // Массив типов контактов
+    let contactsTypeArr = [
+      {
+        text: "Телефон",
+        value: "phone"
+      },
+      {
+        text: "Эл. почта",
+        value: "mail"
+      },
+      {
+        text: "Вконтакте",
+        value: "vk"
+      },
+      {
+        text: "Телеграм",
+        value: "tg"
+      },
+      {
+        text: "Фейсбук",
+        value: "fb"
+      },
+    ]
+    let newContact = document.createElement("div");
+    let select = document.createElement("select");
+    select.classList.add("add-box__select");
+    for (let i = 0; i < optionsArr.length; i++) {
+      let option = document.createElement("option")
+      option.textContent = optionsArr[i].text
+      option.value = optionsArr[i].value
+      select.append(option)
+    }
+    // Функция, возвращающая новый input
+    function getInput(type, placeholder) {
+      let input = document.createElement("input")
+      input.classList.add("add-box__inp")
+      input.type = type
+      input.placeholder = placeholder
+      return input
+    }
+    let deleteBtn = document.createElement("button")
+    newContact.append(select, input, deleteBtn)
+    return select
+  }
+
   // Функция вывода одного пользователя в таблицу 
   function createClientItem(clientObj) {
     const clientTr = document.createElement("tr");
@@ -168,19 +214,32 @@ async function apiCRM() {
     const changeBtn = document.createElement("button");
     const removeBtn = document.createElement("button");
 
-
     // Добавление данных из объекта в ячейки таблицы
     idTd.textContent = clientObj.id;
     fulNameTd.textContent = `${clientObj.surname} ${clientObj.name} ${clientObj.lastName}`;
     createdAtTd.textContent = clientObj.createdAt;
     updatedAtTd.textContent = clientObj.updatedAt;
-    contactsTd.textContent = `${clientObj.contacts.forEach((el) => {el.type})}`;
+
+    // Отрисовка списка контактов
+    clientObj.contacts.forEach((el) => {
+      let linkContact = document.createElement('a');
+      linkContact.href = `${el.value}`;
+      linkContact.classList.add(`${el.type}`);
+      contactsTd.append(linkContact);
+    })
+
     changeBtn.textContent = "Изменить";
     changeBtn.classList.add('btn', 'btn-change');
     removeBtn.textContent = "Удалить";
     removeBtn.classList.add('btn', 'btn-reset');
     actionTd.classList.add('btn-box');
     actionTd.append(changeBtn, removeBtn);
+
+    // Удаление строки с данными пользователя
+    deleteContactBtn.onclick = function () {
+      deleteFromLocalServer(clientObj.id);
+      clientTr.remove();
+    }
 
     // открытие модального окна "Изменить данные"
     changeBtn.addEventListener("click", function () {
@@ -241,6 +300,9 @@ async function apiCRM() {
   let nameNewInp = document.getElementById('newName');
   let lastNameNewInp = document.getElementById('newLastname');
 
+
+
+
   // открытие модального окна "Новый клиент"
   openFormBtn.addEventListener("click", function () {
     modalNewForm.classList.add("modal-parent--open");
@@ -296,12 +358,6 @@ async function apiCRM() {
   let nameChangeInp = document.getElementById('changeName');
   let lastNameChangeInp = document.getElementById('changeLastname');
 
-  // Удаление строки с данными пользователя
-  deleteChangeBtn.onclick = function () {
-    console.log('deleteFromLocalServer');
-    deleteFromLocalServer(clientObj.id, clientTr);
-  }
-
   // закрытие модального окна "Изменить данные"
   modalChangeForm.querySelector(".modal").addEventListener("click", function (event) {
     event._isClick = true
@@ -324,11 +380,6 @@ async function apiCRM() {
   const deleteContactBtn = document.getElementById('deleteContactBtn');
   const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
-  // Удаление строки с данными пользователя
-  deleteContactBtn.onclick = function () {
-    console.log('deleteFromLocalServer');
-    deleteFromLocalServer(clientObj.id, clientTr);
-  }
 
   // закрытие модального окна "Удалить клиента"
   modalDeleteForm.querySelector(".modal").addEventListener("click", function (event) {
