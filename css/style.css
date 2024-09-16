@@ -291,10 +291,6 @@ th {
   margin-bottom: 20px;
 }
 
-/* .table-text {
-  cursor: pointer;
-} */
-
 .error .form__field {
   border-color: red;
 }
@@ -303,4 +299,38 @@ th {
   display: block;
   color: red;
   margin-bottom: 10px;
+}
+
+/* иконки для контактов */
+
+.phone,
+.mail,
+.tg,
+.vk,
+.fb {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  background-repeat: no-repeat;
+}
+
+.phone {
+  background-image: url(../img/phone.svg);
+}
+
+.mail {
+  background-image: url(../img/mail.svg);
+}
+
+.tg {
+  background-image: url(../img/tg.svg);
+}
+
+.vk {
+  background-image: url(../img/vk.svg);
+}
+
+.fb {
+  background-image: url(../img/fb.svg);
 }
