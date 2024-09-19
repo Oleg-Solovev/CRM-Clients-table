@@ -114,13 +114,11 @@ async function apiCRM() {
     return clientsArr;
   }
 
-  // Функция, возвращающая новый input
-  function getInput(placeholder) {
-    let input = document.createElement("input");
-    input.classList.add("add-box__inp");
-    input.type = "text";
-    input.placeholder = placeholder;
-    return input;
+  // Функция преобразования даты
+  function getDateFormat(data) {
+    let date = new Date(data);
+    let result = date.getDate() < 10 ? '0' + date.getDate() + '.' : date.getDate() + '.';
+    result = result
   }
 
   // Функция, возвращая новый контакт
@@ -148,10 +146,14 @@ async function apiCRM() {
         value: "fb"
       },
     ]
-    let newContact = document.createElement("div");
-    let select = document.createElement("select");
-    select.classList.add("add-box__select");
 
+    // бокс с контактом
+    let newContact = document.createElement("div");
+    newContact.classList.add("newContact-box");
+
+    // создание селекта
+    let select = document.createElement("select");
+    select.classList.add("select-contact");
     for (let i = 0; i < contactsTypeArr.length; i++) {
       let option = document.createElement("option")
       option.textContent = contactsTypeArr[i].text
@@ -159,16 +161,27 @@ async function apiCRM() {
       select.append(option)
     }
 
+    // создание инпута
     let input = document.createElement("input");
-    input = getInput('Введите данные контакта');
+    input.classList.add("input-contact");
+    input.type = "text";
+    input.placeholder = 'Введите данные контакта';
 
-    const deleteBtnBox = document.createElement("div");
-    deleteBtnBox.classList.add("deleteBtnBox");
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("deleteBtn");
-    deleteBtnBox.append(deleteBtn);
-    console.log('выполнение функции getNewContact');
-    newContact.append(select, input, deleteBtnBox)
+    const deleteContactBtn = document.createElement("button");
+    deleteContactBtn.classList.add("delete-contact-btn");
+
+    // удаление строки контакта
+    deleteContactBtn.onclick = function () {
+      newContact.remove();
+      contactCounter--;
+      if (contactCounter > 9) {
+        addContactBtn.classList.remove('visually-hidden');
+      }
+    }
+    console.log(contactCounter);
+
+
+    newContact.append(select, input, deleteContactBtn)
     return newContact;
   }
 
@@ -212,8 +225,6 @@ async function apiCRM() {
 
     return accept
   }
-
-
 
   // Функция вывода одного пользователя в таблицу 
   function createClientItem(clientObj) {
@@ -313,7 +324,7 @@ async function apiCRM() {
 
   // Загрузка модального окна "Новый клиент" в JS
   const modalNewForm = document.getElementById('formNewClient');
-  const addNewBtn = document.getElementById('addContactBtn');
+  const addContactBtn = document.getElementById('addContactBtn');
   const formAddContact = document.getElementById('formAddContact');
   const saveNewClientBtn = document.getElementById('saveNewClientBtn');
   const cancelBtn = document.getElementById('cancelBtn');
@@ -321,18 +332,27 @@ async function apiCRM() {
   let nameNewInp = document.getElementById('newName');
   let lastNameNewInp = document.getElementById('newLastname');
 
-  addNewBtn.onclick = function () {
-    console.log('запуск функции getNewContact');
-    formAddContact.prepend(getNewContact());
-  }
 
   // открытие модального окна "Новый клиент"
+  let contactCounter = 0;
   openFormBtn.addEventListener("click", function () {
     modalNewForm.classList.add("modal-parent--open");
     surnameNewInp.value = '';
     nameNewInp.value = '';
     lastNameNewInp.value = '';
   })
+
+  // добавление новой строки контакта
+  addContactBtn.onclick = function () {
+    contactCounter++;
+    if (contactCounter > 9) {
+      addContactBtn.classList.add('visually-hidden');
+    } else {
+      formAddContact.prepend(getNewContact());
+    }
+  }
+
+
 
   // закрытие модального окна "Новый клиент"
   modalNewForm.querySelector(".modal").addEventListener("click", function (event) {
@@ -362,7 +382,7 @@ async function apiCRM() {
         lastName: lastNameNewInp.value.trim(),
       };
 
-      // Добавляем нового студента на сервер и в локальный массив, затем выводим список
+      // Добавляем нового клиента на сервер и в локальный массив, затем выводим список
       await saveInLocalServer(newClient);
       clientsList = await getFromLocalServer();
       renderClientsList(clientsList);
@@ -383,7 +403,6 @@ async function apiCRM() {
   let lastNameChangeInp = document.getElementById('changeLastname');
 
   addChangeBtn.onclick = function () {
-    console.log('запуск функции getNewContact');
     formAddContact.prepend(getNewContact());
   }
 
