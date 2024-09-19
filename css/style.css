@@ -77,12 +77,12 @@ body {
 
 .visually-hidden {
   position: absolute;
-  width: 1px;  
-  height: 1px;  
-  margin: -1px;  
-  border: 0;  
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
   padding: 0;
-  clip: rect(0, 0, 0, 0);  
+  clip: rect(0, 0, 0, 0);
   overflow: hidden;
 }
 
@@ -166,6 +166,12 @@ body {
   background-repeat: no-repeat;
 }
 
+.add-contact-btn {
+  background-image: url(../img/add-contact-btn.svg);
+  background-position: 7px 12px;
+  background-repeat: no-repeat;
+}
+
 
 /* Модальное окно */
 
@@ -188,7 +194,7 @@ body {
 
 .modal-wrapper {
   margin: auto;
-  max-width: 600px;
+  max-width: 800px;
   min-height: 400px;
 }
 
@@ -241,7 +247,7 @@ body {
 }
 
 .form__input {
-  width: 100%;
+  width: 500px;
   height: 40px;
 }
 
@@ -349,10 +355,35 @@ th {
   background-image: url(../img/fb.svg);
 }
 
-.deleteBtnBox {
-  background-color: var(--grey);
+.newContact-box {
+  display: flex;
+  margin-bottom: 15px;
+  border: 1px solid var(--grey);
 }
 
-.deleteBtn {
-  background-image: url(../img/delete-btn.svg);
+.select-contact {
+  font-size: 14px;
+  padding: 10px;
+  padding-right: 30px;
+  outline: none;
+  border: 1px solid var(--txt_grey);
+  background-color: #E7E5EB;
+}
+
+.input-contact {
+  padding: 5px;
+  width: 329px;
+  outline: none;
+  border: 1px solid var(--txt_grey);
+}
+
+.delete-contact-btn {
+  width: 39px;
+  height: 39px;
+  cursor: pointer;
+  border: 0;
+  background-color: #E7E5EB;
+  background-image: url(../img/delete-contact-btn.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
 }
