@@ -1,6 +1,11 @@
 // весь код в функции, чтобы сработал await
 async function apiCRM() {
 
+  //  Короткая функция проверки данных в консоли
+  function cl(data) {
+    console.log(data);
+  }
+
   //  Функция проверки списка пользователей на сервере
   async function checkLocalServer() {
     const response = await fetch('http://localhost:3000/api/clients', {
@@ -118,7 +123,17 @@ async function apiCRM() {
   function getDateFormat(data) {
     let date = new Date(data);
     let result = date.getDate() < 10 ? '0' + date.getDate() + '.' : date.getDate() + '.';
-    result = result
+    result = result + (date.getMonth() < 9 ? '0' + (date.getMonth() + 1) + '.' : (date.getMonth() + 1) + '.');
+    result = result + date.getFullYear();
+    return result
+  }
+
+  // Функция преобразования времени
+  function getTimeFormat(data) {
+    let time = new Date(data);
+    let result = time.getHours() < 10 ? '0' + time.getHours() + ':' : time.getHours() + ':';
+    result = result + (time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes());
+    return result
   }
 
   // Функция, возвращая новый контакт
@@ -233,7 +248,11 @@ async function apiCRM() {
     idTd.classList.add('table-text');
     const fulNameTd = document.createElement("td");
     const createdAtTd = document.createElement("td");
+    const createdAtTdTime = document.createElement("span");
+    createdAtTdTime.classList.add('table-text', 'span-text');
     const updatedAtTd = document.createElement("td");
+    const updatedAtTdTime = document.createElement("span");
+    updatedAtTdTime.classList.add('table-text', 'span-text');
     const contactsTd = document.createElement("td");
     const contactsBox = document.createElement("div");
     contactsBox.classList.add('contactsBox');
@@ -245,8 +264,12 @@ async function apiCRM() {
     // Добавление данных из объекта в ячейки таблицы
     idTd.textContent = clientObj.id;
     fulNameTd.textContent = `${clientObj.surname} ${clientObj.name} ${clientObj.lastName}`;
-    createdAtTd.textContent = clientObj.createdAt;
-    updatedAtTd.textContent = clientObj.updatedAt;
+    createdAtTd.textContent = `${getDateFormat(clientObj.createdAt)}`
+    createdAtTdTime.textContent = `${getTimeFormat(clientObj.createdAt)}`;
+    createdAtTd.append(createdAtTdTime);
+    updatedAtTd.textContent = `${getDateFormat(clientObj.updatedAt)}`;
+    updatedAtTdTime.textContent = `${getTimeFormat(clientObj.updatedAt)}`;
+    updatedAtTd.append(updatedAtTdTime);
 
     // Отрисовка списка контактов
     clientObj.contacts.forEach((el) => {
@@ -272,12 +295,17 @@ async function apiCRM() {
     // открытие модального окна "Изменить данные"
     changeBtn.addEventListener("click", function () {
       modalChangeForm.classList.add("modal-parent--open");
-      surnameChangeInp.value = clientObj.surname.value;
-      nameChangeInp.value = clientObj.name.value;
-      lastNameChangeInp.value = clientObj.lastName.value;
-      let titleID = document.createElement("span");
-      titleID.textContent = `ID: ${clientObj.id.value}`;
-      modalTitle.append(titleID);
+
+      // Очистка полей перед заполнением
+      surnameChangeInp.value = '';
+      nameChangeInp.value = '';
+      lastNameChangeInp.value = '';
+      titleID.textContent = '';
+
+      surnameChangeInp.value = clientObj.surname;
+      nameChangeInp.value = clientObj.name;
+      lastNameChangeInp.value = clientObj.lastName;
+      titleID.textContent = `ID: ${clientObj.id}`;
     })
 
     // открытие модального окна "Удалить клиента"
@@ -380,6 +408,7 @@ async function apiCRM() {
         name: nameNewInp.value.trim(),
         surname: surnameNewInp.value.trim(),
         lastName: lastNameNewInp.value.trim(),
+        // contacts: массив контактов
       };
 
       // Добавляем нового клиента на сервер и в локальный массив, затем выводим список
@@ -401,10 +430,16 @@ async function apiCRM() {
   let surnameChangeInp = document.getElementById('changeSurname');
   let nameChangeInp = document.getElementById('changeName');
   let lastNameChangeInp = document.getElementById('changeLastname');
+  let titleID = document.createElement("span");
+  titleID.classList.add('table-text', 'span-text');
+  modalTitle.append(titleID);
+
 
   addChangeBtn.onclick = function () {
     formAddContact.prepend(getNewContact());
   }
+
+
 
   // закрытие модального окна "Изменить данные"
   modalChangeForm.querySelector(".modal").addEventListener("click", function (event) {
