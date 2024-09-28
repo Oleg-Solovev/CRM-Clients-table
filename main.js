@@ -184,13 +184,14 @@ async function apiCRM() {
 
     const deleteContactBtn = document.createElement("button");
     deleteContactBtn.classList.add("delete-contact-btn");
+    deleteContactBtn.setAttribute("tooltip", "Удалить контакт");
 
     // удаление строки контакта
     deleteContactBtn.onclick = function () {
       newContact.remove();
       contactCounter--;
-      if (contactCounter > 9) {
-        addContactBtn.classList.remove('visually-hidden');
+      if (contactCounter > 10) {
+        addContactBtn.classList.add('visually-hidden');
       }
     }
     console.log(contactCounter);
@@ -275,7 +276,8 @@ async function apiCRM() {
     clientObj.contacts.forEach((el) => {
       let linkContact = document.createElement('a');
       linkContact.href = `${el.value}`;
-      linkContact.classList.add(`${el.type}`);
+      linkContact.classList.add(`${el.type}`, "contacts");
+      linkContact.setAttribute("tooltip", `${el.value}`);
       contactsBox.append(linkContact);
     })
 
@@ -404,11 +406,22 @@ async function apiCRM() {
 
     if (validationForm(modalNewForm)) {
 
+      let contacts = [];
+      const contactType = document.querySelectorAll('.select-contact');
+      const contactValue = document.querySelectorAll('.input-contact');
+
+      for (let i = 0; i < contactType.length; i++) {
+        contacts.push({
+          type: contactType[i].value,
+          value: contactValue[i].value
+        })
+      }
+
       let newClient = {
         name: nameNewInp.value.trim(),
         surname: surnameNewInp.value.trim(),
         lastName: lastNameNewInp.value.trim(),
-        // contacts: массив контактов
+        contacts: contacts,
       };
 
       // Добавляем нового клиента на сервер и в локальный массив, затем выводим список
