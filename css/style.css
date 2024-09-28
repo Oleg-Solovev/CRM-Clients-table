@@ -116,8 +116,7 @@ body {
 }
 
 .add-client-btn:hover,
-.save-client-btn:hover,
-.delete-contact-btn:hover {
+.save-client-btn:hover {
   background-color: #B89EFF;
   color: #FFF;
 }
@@ -127,8 +126,7 @@ body {
 }
 
 .add-client-btn:active,
-.save-client-btn:active,
-.delete-contact-btn:active {
+.save-client-btn:active {
   background-color: #8052FF;
 }
 
@@ -137,8 +135,7 @@ body {
   transform: translateY(3px);
 }
 
-.save-client-btn,
-.delete-contact-btn {
+.save-client-btn {
   color: #FFF;
   background-color: var(--firm);
 }
@@ -160,10 +157,18 @@ body {
   background-repeat: no-repeat;
 }
 
+.btn-change:hover {
+color: var(--firm);
+}
+
 .btn-reset {
   background-image: url(../img/btn-reset.svg);
   background-position: 10px 13px;
   background-repeat: no-repeat;
+}
+
+.btn-reset:hover {
+  color: var(--red);
 }
 
 .add-contact-btn {
@@ -172,6 +177,61 @@ body {
   background-repeat: no-repeat;
 }
 
+.delete-contact-btn {
+  position: relative;
+  width: 39px;
+  height: 39px;
+  cursor: pointer;
+  border: 0;
+  background-color: #E7E5EB;
+  background-image: url(../img/delete-contact-btn-1.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  transition: background-image 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+.delete-contact-btn:hover {
+  background-image: url(../img/delete-contact-btn-2.svg);
+  border: 2px solid var(--red);
+}
+
+.delete-contact-btn::before {
+  content: attr(tooltip);
+  position: absolute;
+  color: white;
+  padding: 7px 12px;
+  background-color: var(--black);
+  width: 140px;
+  min-height: 30px;
+  font-size: 12px;
+  transform: translateX(-50%);
+  bottom: 100%;
+  transition: inherit;
+  visibility: hidden;
+  z-index: -1;
+  opacity: 0;
+}
+
+.delete-contact-btn:hover::before {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+  bottom: calc(100% + 10px);
+}
+
+
+.btn-change-reset {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+  background-image: url(../img/btn-change-reset.svg);
+  background-repeat: no-repeat;
+}
 
 /* Модальное окно */
 
@@ -218,19 +278,6 @@ body {
 .modal__title--delate {
   margin: 0;
   text-align: center;
-}
-
-.btn-change-reset {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  border: 0;
-  background-color: transparent;
-  background-image: url(../img/btn-change-reset.svg);
-  background-repeat: no-repeat;
 }
 
 .filter {
@@ -342,15 +389,41 @@ th {
   max-width: 100px;
 }
 
-.phone,
-.mail,
-.tg,
-.vk,
-.fb {
+.contacts {
+  position: relative;
   width: 16px;
   height: 16px;
   margin-right: 4px;
+  opacity: .8;
   background-repeat: no-repeat;
+  transition: opacity 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+.contacts:hover {
+  opacity: 1;
+}
+
+.contacts::before {
+  content: attr(tooltip);
+  position: absolute;
+  color: white;
+  padding: 7px 12px;
+  background-color: var(--black);
+  min-height: 30px;
+  font-size: 12px;
+  transform: translateX(-50%);
+  bottom: 100%;
+  transition: inherit;
+  visibility: hidden;
+  z-index: -1;
+  opacity: 0;
+}
+
+.contacts:hover::before {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+  bottom: calc(100% + 10px);
 }
 
 .phone {
@@ -395,13 +468,4 @@ th {
   border: 1px solid var(--txt_grey);
 }
 
-.delete-contact-btn {
-  width: 39px;
-  height: 39px;
-  cursor: pointer;
-  border: 0;
-  background-color: #E7E5EB;
-  background-image: url(../img/delete-contact-btn.svg);
-  background-repeat: no-repeat;
-  background-position: center center;
-}
+/* разное */
