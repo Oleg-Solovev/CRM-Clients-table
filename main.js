@@ -136,6 +136,27 @@ async function apiCRM() {
     return result
   }
 
+  // Функция, возвращая кнопку addContactBtn
+  function createAddContactBtn() {
+    const addContactBtn = document.createElement("button");
+    addContactBtn.classList.add('btn', 'add-contact-btn');
+    addContactBtn.textContent = 'Добавить контакт';
+
+    // добавление новой строки контакта
+    addContactBtn.addEventListener("click", async e => {
+      e.preventDefault();
+      contactCounter++;
+      if (contactCounter > 9) {
+        addContactBtn.remove();
+      } else {
+        formAddContact.prepend(getNewContact());
+      }
+    })
+
+    return addContactBtn
+  }
+
+
   // Функция, возвращая новый контакт
   function getNewContact() {
     // Массив типов контактов
@@ -145,7 +166,7 @@ async function apiCRM() {
         value: "phone"
       },
       {
-        text: "Эл. почта",
+        text: "Email",
         value: "mail"
       },
       {
@@ -169,11 +190,13 @@ async function apiCRM() {
     // создание селекта
     let select = document.createElement("select");
     select.classList.add("select-contact");
+
     for (let i = 0; i < contactsTypeArr.length; i++) {
-      let option = document.createElement("option")
-      option.textContent = contactsTypeArr[i].text
-      option.value = contactsTypeArr[i].value
-      select.append(option)
+      let option = document.createElement("option");
+      option.classList.add("option-contact");
+      option.textContent = contactsTypeArr[i].text;
+      option.value = contactsTypeArr[i].value;
+      select.append(option);
     }
 
     // создание инпута
@@ -190,12 +213,10 @@ async function apiCRM() {
     deleteContactBtn.onclick = function () {
       newContact.remove();
       contactCounter--;
-      if (contactCounter > 10) {
-        addContactBtn.classList.add('visually-hidden');
+      if (contactCounter < 10) {
+        createAddContactBtn();
       }
     }
-    console.log(contactCounter);
-
 
     newContact.append(select, input, deleteContactBtn)
     return newContact;
@@ -239,6 +260,17 @@ async function apiCRM() {
       input.value = text.substr(0, 1).toUpperCase() + text.substr(1).toLowerCase();
     }
 
+    // Проверка полей контактов
+    const allInputsContacts = form.querySelectorAll('.input-contact');
+    for (const input of allInputsContacts) {
+      let text = input.value.trim();
+      removeError(input);
+      if (text.length < 3) {
+        createError(input, 'Должно быть не менее 3 символов!');
+        accept = false;
+      }
+    }
+
     return accept
   }
 
@@ -277,9 +309,22 @@ async function apiCRM() {
       let linkContact = document.createElement('a');
       linkContact.href = `${el.value}`;
       linkContact.classList.add(`${el.type}`, "contacts");
-      linkContact.setAttribute("tooltip", `${el.value}`);
+      let contactTypeName = "Контакт";
+      switch (el.type) {
+        case "phone": contactTypeName = "Телефон"; break;
+        case "mail": contactTypeName = "Email"; break;
+        case "tg": contactTypeName = "Телеграм"; break;
+        case "vk": contactTypeName = "Вконтакте"; break;
+        case "fb": contactTypeName = "Фейсбук"; break;
+        default: contactTypeName = "Контакт"; break;
+      }
+      linkContact.setAttribute("tooltip", `${contactTypeName}: ${el.value}`);
       contactsBox.append(linkContact);
     })
+
+    if (clientObj.contacts.length > 5) {
+      contactsBox.classList.add('contactsBoxWrap');
+    }
 
     changeBtn.textContent = "Изменить";
     changeBtn.classList.add('btn', 'btn-change');
@@ -308,7 +353,21 @@ async function apiCRM() {
       nameChangeInp.value = clientObj.name;
       lastNameChangeInp.value = clientObj.lastName;
       titleID.textContent = `ID: ${clientObj.id}`;
-    })
+
+      // Отрисовка списка контактов
+      // clientObj.contacts.forEach((el) => {
+      //   cl(`${el.type}: ${el.value}`);
+      //   let changeContact = getNewContact();
+      //   changeContact.input.value = `${el.value}`;
+      // })
+
+      // clientObj.contacts.forEach((el) => {
+      // formChangeContact.prepend(getNewContact());
+      // select = document.querySelector("select-contact");
+      // select.textContent = `${el.type}`;
+      // let input = document.querySelector("input-contact");
+      // input.textContent = `${el.value}`;
+    });
 
     // открытие модального окна "Удалить клиента"
     removeBtn.addEventListener("click", function () {
@@ -322,9 +381,14 @@ async function apiCRM() {
   // Функция отрисовки таблицы всех пользователей
   function renderClientsList(arr) {
     tbody.innerHTML = '';
-    arr.forEach(clientItem => {
-      tbody.append(createClientItem(clientItem));
-    })
+    const loader = document.querySelector(".loader");
+    loader.classList.remove("visually-hidden");
+    setTimeout(() => {
+      loader.classList.add("visually-hidden");
+      arr.forEach(clientItem => {
+        tbody.append(createClientItem(clientItem));
+      })
+    }, 2000);
   }
 
   // функция сортировки массива пользователей
@@ -340,6 +404,9 @@ async function apiCRM() {
     return renderClientsList(sortArr);
   }
 
+
+
+
   // Start. 
 
   // первоначальный массив пользователей 
@@ -354,8 +421,8 @@ async function apiCRM() {
 
   // Загрузка модального окна "Новый клиент" в JS
   const modalNewForm = document.getElementById('formNewClient');
-  const addContactBtn = document.getElementById('addContactBtn');
   const formAddContact = document.getElementById('formAddContact');
+  formAddContact.append(createAddContactBtn());
   const saveNewClientBtn = document.getElementById('saveNewClientBtn');
   const cancelBtn = document.getElementById('cancelBtn');
   let surnameNewInp = document.getElementById('newSurname');
@@ -371,18 +438,6 @@ async function apiCRM() {
     nameNewInp.value = '';
     lastNameNewInp.value = '';
   })
-
-  // добавление новой строки контакта
-  addContactBtn.onclick = function () {
-    contactCounter++;
-    if (contactCounter > 9) {
-      addContactBtn.classList.add('visually-hidden');
-    } else {
-      formAddContact.prepend(getNewContact());
-    }
-  }
-
-
 
   // закрытие модального окна "Новый клиент"
   modalNewForm.querySelector(".modal").addEventListener("click", function (event) {
@@ -436,8 +491,10 @@ async function apiCRM() {
 
   // Загрузка модального окна "Изменить данные" в JS
   const modalChangeForm = document.getElementById('formChange');
+  const btnChangeReset = document.getElementById('btnChangeReset');
   const modalTitle = document.getElementById('modalTitle');
-  const addChangeBtn = document.getElementById('addChangeContactBtn');
+  const formChangeContact = document.getElementById('formChangeContact');
+  formChangeContact.append(createAddContactBtn());
   const saveChangeClientBtn = document.getElementById('saveChangeContactBtn');
   const deleteChangeBtn = document.getElementById('deleteChangeBtn');
   let surnameChangeInp = document.getElementById('changeSurname');
@@ -447,18 +504,49 @@ async function apiCRM() {
   titleID.classList.add('table-text', 'span-text');
   modalTitle.append(titleID);
 
+  // Кнопка отправки формы "Изменить данные" и проверка введённых данных
+  saveChangeClientBtn.addEventListener("click", async e => {
+    e.preventDefault();
 
-  addChangeBtn.onclick = function () {
-    formAddContact.prepend(getNewContact());
-  }
+    if (validationForm(modalChangeForm)) {
 
+      let contacts = [];
+      const contactType = document.querySelectorAll('.select-contact');
+      const contactValue = document.querySelectorAll('.input-contact');
 
+      for (let i = 0; i < contactType.length; i++) {
+        contacts.push({
+          type: contactType[i].value,
+          value: contactValue[i].value
+        })
+      }
+
+      let newClient = {
+        name: nameNewInp.value.trim(),
+        surname: surnameNewInp.value.trim(),
+        lastName: lastNameNewInp.value.trim(),
+        contacts: contacts,
+      };
+
+      // Добавляем нового клиента на сервер и в локальный массив, затем выводим список
+      await saveInLocalServer(newClient);
+      clientsList = await getFromLocalServer();
+      renderClientsList(clientsList);
+
+      // Закрытие модального окна "Изменить данные" 
+      modalNewForm.classList.remove("modal-parent--open")
+    }
+  })
 
   // закрытие модального окна "Изменить данные"
   modalChangeForm.querySelector(".modal").addEventListener("click", function (event) {
     event._isClick = true
   })
   modalChangeForm.addEventListener("click", function (event) {
+    if (event._isClick === true) return
+    modalChangeForm.classList.remove("modal-parent--open")
+  })
+  btnChangeReset.addEventListener("click", function (event) {
     if (event._isClick === true) return
     modalChangeForm.classList.remove("modal-parent--open")
   })

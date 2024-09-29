@@ -68,11 +68,23 @@ body {
   margin: 0 auto;
 }
 
-.download-picture {
+.loader {
   display: block;
   position: absolute;
   top: 50%;
   left: 50%;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 4px solid var(--firm);
+  border-right-color: transparent;
+  animation: move 1s linear infinite;
+}
+
+@keyframes move {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .visually-hidden {
@@ -155,16 +167,18 @@ body {
   background-image: url(../img/btn-change.svg);
   background-position: 10px 13px;
   background-repeat: no-repeat;
+  transition: color 0.3s ease-in-out;
 }
 
 .btn-change:hover {
-color: var(--firm);
+  color: var(--firm);
 }
 
 .btn-reset {
   background-image: url(../img/btn-reset.svg);
   background-position: 10px 13px;
   background-repeat: no-repeat;
+  transition: color 0.3s ease-in-out;
 }
 
 .btn-reset:hover {
@@ -175,6 +189,11 @@ color: var(--firm);
   background-image: url(../img/add-contact-btn.svg);
   background-position: 7px 12px;
   background-repeat: no-repeat;
+  transition: color 0.3s ease-in-out;
+}
+
+.add-contact-btn:hover {
+  color: var(--firm);
 }
 
 .delete-contact-btn {
@@ -389,11 +408,16 @@ th {
   max-width: 100px;
 }
 
+.contactsBoxWrap {
+  flex-wrap: wrap;
+}
+
 .contacts {
   position: relative;
   width: 16px;
   height: 16px;
   margin-right: 4px;
+  margin-bottom: 4px;
   opacity: .8;
   background-repeat: no-repeat;
   transition: opacity 0.3s ease-in-out, border 0.3s ease-in-out;
@@ -457,13 +481,39 @@ th {
   padding: 10px;
   padding-right: 30px;
   outline: none;
+  cursor: pointer;
+  border-radius: 0;
   border: 1px solid var(--txt_grey);
   background-color: #E7E5EB;
+}
+
+.select-contact::after {
+  height: 8px;
+  width: 8px;
+  z-index: 3;
+  top: 40%;
+  border: 1px solid var(--firm);
+  border-width: 0 0 1px 1px;
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease-in-out,
+}
+
+.option-contact {
+  border-radius: 0;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: none;
+  transition: background-color 0.3s ease-in-out,
+}
+
+.option-contact:hover {
+  background-color: var(--firm);
 }
 
 .input-contact {
   padding: 5px;
   width: 329px;
+  height: 39px;
   outline: none;
   border: 1px solid var(--txt_grey);
 }

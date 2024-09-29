@@ -105,12 +105,10 @@
             </thead>
             <tbody class="tbody" id="tbody"></tbody>
         </table>
-        <svg class="download-picture visually-hidden" width="40" height="40" viewBox="0 0 40 40" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M2 20C2 29.941 10.059 38 20 38C29.941 38 38 29.941 38 20C38 10.059 29.941 2 20 2C17.6755 2 15.454 2.4405 13.414 3.243"
-                stroke="#9873FF" stroke-width="4" stroke-miterlimit="10" stroke-linecap="round" />
-        </svg>
+
+        <!-- Индикатор загрузки -->
+        <div class="loader"></div>
+
         <button class="btn add-client-btn" id="addClientBtn">
             <svg width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -142,9 +140,7 @@
                         <input class="form__input input-text" type="text" id="changeLastname" name="lastname"
                             autocomplete="off" required>
                     </label>
-                    <div class="form__add-contact">
-                        <button class="btn add-contact-btn" id="addChangeContactBtn">Добавить контакт</button>
-                    </div>
+                    <div class="form__add-contact" id="formChangeContact"></div>
                     <div class="form-btn-box">
                         <button class="btn save-client-btn" id="saveChangeContactBtn">Сохранить</button>
                         <button class="btn delete-btn" id="deleteChangeBtn">Удалить клиента</button>
@@ -175,9 +171,7 @@
                         <input class="form__input input-text" type="text" id="newLastname" name="lastname"
                             autocomplete="off" required>
                     </label>
-                    <div class="form__add-contact" id="formAddContact">
-                        <button class="btn add-contact-btn" id="addContactBtn">Добавить контакт</button>
-                    </div>
+                    <div class="form__add-contact" id="formAddContact"></div>
                     <div class="form-btn-box">
                         <button class="btn save-client-btn" id="saveNewClientBtn">Сохранить</button>
                         <button class="btn cancel-contact-btn" id="cancelBtn">Отмена</button>
