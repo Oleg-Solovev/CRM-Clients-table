@@ -101,6 +101,19 @@ async function apiCRM() {
     return clientsArr;
   }
 
+  //  Функция изменения пользователя на сервере
+  async function changeInLocalServer(item, id) {
+    const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(item),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    let clientsArr = await response.json();
+    return clientsArr;
+  }
+
   //  Функция загрузки массива пользователей с сервера
   async function getFromLocalServer() {
     const response = await fetch('http://localhost:3000/api/clients', {
@@ -158,7 +171,7 @@ async function apiCRM() {
 
 
   // Функция, возвращая новый контакт
-  function getNewContact() {
+  function getNewContact(obj) {
     // Массив типов контактов
     let contactsTypeArr = [
       {
@@ -209,6 +222,8 @@ async function apiCRM() {
     deleteContactBtn.classList.add("delete-contact-btn");
     deleteContactBtn.setAttribute("tooltip", "Удалить контакт");
 
+    newContact.append(select, input, deleteContactBtn)
+
     // удаление строки контакта
     deleteContactBtn.onclick = function () {
       newContact.remove();
@@ -218,7 +233,6 @@ async function apiCRM() {
       }
     }
 
-    newContact.append(select, input, deleteContactBtn)
     return newContact;
   }
 
@@ -353,20 +367,16 @@ async function apiCRM() {
       nameChangeInp.value = clientObj.name;
       lastNameChangeInp.value = clientObj.lastName;
       titleID.textContent = `ID: ${clientObj.id}`;
+      itemId = clientObj.id;
 
-      // Отрисовка списка контактов
-      // clientObj.contacts.forEach((el) => {
-      //   cl(`${el.type}: ${el.value}`);
-      //   let changeContact = getNewContact();
-      //   changeContact.input.value = `${el.value}`;
-      // })
-
-      // clientObj.contacts.forEach((el) => {
-      // formChangeContact.prepend(getNewContact());
-      // select = document.querySelector("select-contact");
-      // select.textContent = `${el.type}`;
-      // let input = document.querySelector("input-contact");
-      // input.textContent = `${el.value}`;
+      // Отрисовка списка контактов и заполнение полей
+      clientObj.contacts.forEach((el) => {
+        cl(`${el.type}: ${el.value}`);
+        formChangeContact.append(getNewContact(el));
+        cl(document.querySelectorAll('.option-contact').length)
+        // document.querySelectorAll('.option-contact').find(el => el.value === obj.type).setAttribute('selected', 'selected');
+        document.querySelector('.input-contact').value = el.value;
+      })
     });
 
     // открытие модального окна "Удалить клиента"
@@ -411,6 +421,7 @@ async function apiCRM() {
 
   // первоначальный массив пользователей 
   let clientsList = [];
+  let itemId = 0;
   // Проверка наличия данных на сервере
   clientsList = await checkLocalServer();
 
@@ -479,7 +490,7 @@ async function apiCRM() {
         contacts: contacts,
       };
 
-      // Добавляем нового клиента на сервер и в локальный массив, затем выводим список
+      // Добавляем нового клиента на сервер и выводим список
       await saveInLocalServer(newClient);
       clientsList = await getFromLocalServer();
       renderClientsList(clientsList);
@@ -521,6 +532,7 @@ async function apiCRM() {
         })
       }
 
+      cl(itemId);
       let newClient = {
         name: nameNewInp.value.trim(),
         surname: surnameNewInp.value.trim(),
@@ -528,13 +540,13 @@ async function apiCRM() {
         contacts: contacts,
       };
 
-      // Добавляем нового клиента на сервер и в локальный массив, затем выводим список
-      await saveInLocalServer(newClient);
+      // Добавляем изменения данных клиента на сервер и затем выводим список
+      await changeInLocalServer(newClient, itemId);
       clientsList = await getFromLocalServer();
       renderClientsList(clientsList);
 
       // Закрытие модального окна "Изменить данные" 
-      modalNewForm.classList.remove("modal-parent--open")
+      modalChangeForm.classList.remove("modal-parent--open")
     }
   })
 
