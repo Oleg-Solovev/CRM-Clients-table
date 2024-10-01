@@ -171,7 +171,7 @@ async function apiCRM() {
 
 
   // Функция, возвращая новый контакт
-  function getNewContact(obj) {
+  function getNewContact(obj = {}) {
     // Массив типов контактов
     let contactsTypeArr = [
       {
@@ -207,6 +207,11 @@ async function apiCRM() {
     for (let i = 0; i < contactsTypeArr.length; i++) {
       let option = document.createElement("option");
       option.classList.add("option-contact");
+      if (obj) {
+        if (obj.type === contactsTypeArr[i].value) {
+          option.selected = 'selected';
+        }
+      }
       option.textContent = contactsTypeArr[i].text;
       option.value = contactsTypeArr[i].value;
       select.append(option);
@@ -217,6 +222,9 @@ async function apiCRM() {
     input.classList.add("input-contact");
     input.type = "text";
     input.placeholder = 'Введите данные контакта';
+    if (obj) {
+      input.value = obj.value;
+    }
 
     const deleteContactBtn = document.createElement("button");
     deleteContactBtn.classList.add("delete-contact-btn");
@@ -232,7 +240,6 @@ async function apiCRM() {
         createAddContactBtn();
       }
     }
-
     return newContact;
   }
 
@@ -295,9 +302,13 @@ async function apiCRM() {
     idTd.classList.add('table-text');
     const fulNameTd = document.createElement("td");
     const createdAtTd = document.createElement("td");
+    const createdAtTdDate = document.createElement("span");
+    createdAtTdDate.classList.add('table__date');
     const createdAtTdTime = document.createElement("span");
     createdAtTdTime.classList.add('table-text', 'span-text');
     const updatedAtTd = document.createElement("td");
+    const updatedAtTdDate = document.createElement("span");
+    updatedAtTdDate.classList.add('table__date');
     const updatedAtTdTime = document.createElement("span");
     updatedAtTdTime.classList.add('table-text', 'span-text');
     const contactsTd = document.createElement("td");
@@ -311,18 +322,19 @@ async function apiCRM() {
     // Добавление данных из объекта в ячейки таблицы
     idTd.textContent = clientObj.id;
     fulNameTd.textContent = `${clientObj.surname} ${clientObj.name} ${clientObj.lastName}`;
-    createdAtTd.textContent = `${getDateFormat(clientObj.createdAt)}`
+    createdAtTdDate.textContent = `${getDateFormat(clientObj.createdAt)}`
     createdAtTdTime.textContent = `${getTimeFormat(clientObj.createdAt)}`;
-    createdAtTd.append(createdAtTdTime);
-    updatedAtTd.textContent = `${getDateFormat(clientObj.updatedAt)}`;
+    createdAtTd.append(createdAtTdDate, createdAtTdTime);
+    updatedAtTdDate.textContent = `${getDateFormat(clientObj.updatedAt)}`;
     updatedAtTdTime.textContent = `${getTimeFormat(clientObj.updatedAt)}`;
-    updatedAtTd.append(updatedAtTdTime);
+    updatedAtTd.append(updatedAtTdDate, updatedAtTdTime);
 
     // Отрисовка списка контактов
     clientObj.contacts.forEach((el) => {
       let linkContact = document.createElement('a');
       linkContact.href = `${el.value}`;
       linkContact.classList.add(`${el.type}`, "contacts");
+      linkContact.target = '_blank';
       let contactTypeName = "Контакт";
       switch (el.type) {
         case "phone": contactTypeName = "Телефон"; break;
@@ -373,9 +385,6 @@ async function apiCRM() {
       clientObj.contacts.forEach((el) => {
         cl(`${el.type}: ${el.value}`);
         formChangeContact.append(getNewContact(el));
-        cl(document.querySelectorAll('.option-contact').length)
-        // document.querySelectorAll('.option-contact').find(el => el.value === obj.type).setAttribute('selected', 'selected');
-        document.querySelector('.input-contact').value = el.value;
       })
     });
 
@@ -410,6 +419,15 @@ async function apiCRM() {
       ? -1
       : 0);
     dir == true ? dir = false : dir = true;
+    cl(`${prop}Sort`);
+    let sortImg = document.getElementById(`${prop}Sort`);
+    if (prop === 'surname') {
+      sortImg.classList.toggle('sortA-123');
+      sortImg.classList.toggle('sortA-321');
+    } else {
+      sortImg.classList.toggle('sort-123');
+      sortImg.classList.toggle('sort-321');
+    }
     // Отрисовка списка после сортировки
     return renderClientsList(sortArr);
   }
@@ -532,11 +550,10 @@ async function apiCRM() {
         })
       }
 
-      cl(itemId);
       let newClient = {
-        name: nameNewInp.value.trim(),
-        surname: surnameNewInp.value.trim(),
-        lastName: lastNameNewInp.value.trim(),
+        name: nameChangeInp.value.trim(),
+        surname: surnameChangeInp.value.trim(),
+        lastName: lastNameChangeInp.value.trim(),
         contacts: contacts,
       };
 
@@ -560,10 +577,9 @@ async function apiCRM() {
   })
   btnChangeReset.addEventListener("click", function (event) {
     if (event._isClick === true) return
-    modalChangeForm.classList.remove("modal-parent--open")
+      modalChangeForm.classList.remove("modal-parent--open");
+      formChangeContact.innerHTML = '';
   })
-
-  // закрытие модального окна "Изменить данные" по кнопке Esc
   window.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       modalChangeForm.classList.remove("modal-parent--open")
