@@ -98,6 +98,7 @@ body {
   overflow: hidden;
 }
 
+
 /* Кнопки */
 
 .btn {
@@ -128,7 +129,7 @@ body {
 }
 
 .add-client-btn:hover,
-.save-client-btn:hover {
+.client-btn:hover {
   background-color: #B89EFF;
   color: #FFF;
 }
@@ -138,7 +139,7 @@ body {
 }
 
 .add-client-btn:active,
-.save-client-btn:active {
+.client-btn:active {
   background-color: #8052FF;
 }
 
@@ -147,13 +148,13 @@ body {
   transform: translateY(3px);
 }
 
-.save-client-btn {
+.client-btn {
   color: #FFF;
   background-color: var(--firm);
 }
 
 .delete-btn,
-.cancel-contact-btn {
+.cancel-btn {
   font-weight: 400;
   text-decoration: underline;
 }
@@ -238,8 +239,7 @@ body {
   bottom: calc(100% + 10px);
 }
 
-
-.btn-change-reset {
+.btn-modal-reset {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -248,36 +248,36 @@ body {
   cursor: pointer;
   border: 0;
   background-color: transparent;
-  background-image: url(../img/btn-change-reset.svg);
+  background-image: url(../img/btn-modal-reset.svg);
   background-repeat: no-repeat;
 }
 
 /* Модальное окно */
 
-.modal-parent {
+.modal__parent {
   position: fixed;
   inset: 0;
   z-index: 500;
   display: flex;
   overflow-y: auto;
-  opacity: 0;
-  visibility: hidden;
+  /* opacity: 0;
+  visibility: hidden; */
   background-color: rgba(0, 0, 0, .8);
   transition: opacity .3s ease-in-out, visibility .3s ease-in-out;
 }
 
-.modal-parent--open {
+/* .modal__parent--open {
   opacity: 1;
   visibility: visible;
-}
+} */
 
-.modal-wrapper {
+.modal__wrapper {
   margin: auto;
   max-width: 800px;
   min-height: 400px;
 }
 
-.modal {
+.modal__form-wrapper {
   position: relative;
   margin: 30px 0;
   width: 100%;
@@ -290,8 +290,6 @@ body {
   margin: 0;
   margin-bottom: 15px;
   text-align: left;
-  /* font-size: 18px;
-  font-weight: 800; */
 }
 
 .modal__title-bold {
@@ -328,7 +326,7 @@ body {
   color: var(--txt_grey);
 }
 
-.form__text span {
+.form__text .star {
   color: var(--firm);
 }
 
@@ -346,7 +344,7 @@ body {
   background-color: var(--grey);
 }
 
-.form-btn-box {
+.form__btn-box {
   display: flex;
   flex-direction: column;
 }
@@ -357,6 +355,66 @@ body {
 
 .eror {
   outline: 2px dashed #ac0000;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 35%;
+  left: 80%;
+  width: 8px;
+  height: 8px;
+  z-index: 3;
+  border: 1px solid var(--firm);
+  border-width: 0 0 1px 1px;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+.select-wrapper.is-open::after {
+  transform: rotate(135deg);
+}
+
+.newContact-box {
+  display: flex;
+  margin-bottom: 15px;
+  border: 1px solid var(--grey);
+}
+
+.select-contact {
+  font-size: 14px;
+  padding: 10px;
+  padding-right: 30px;
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  border: 1px solid var(--txt_grey);
+  background-color: #E7E5EB;
+  appearance: none;
+}
+
+.option-contact {
+  border-radius: 0;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: none;
+  transition: background-color 0.3s ease-in-out,
+}
+
+.option-contact:hover {
+  background-color: var(--firm);
+}
+
+.input-contact {
+  padding: 5px;
+  width: 352px;
+  height: 39px;
+  outline: none;
+  border: 1px solid var(--txt_grey);
 }
 
 /* Таблица */
@@ -502,54 +560,6 @@ th {
 
 .fb {
   background-image: url(../img/fb.svg);
-}
-
-.newContact-box {
-  display: flex;
-  margin-bottom: 15px;
-  border: 1px solid var(--grey);
-}
-
-.select-contact {
-  font-size: 14px;
-  padding: 10px;
-  padding-right: 30px;
-  outline: none;
-  cursor: pointer;
-  border-radius: 0;
-  border: 1px solid var(--txt_grey);
-  background-color: #E7E5EB;
-}
-
-.select-contact::after {
-  height: 8px;
-  width: 8px;
-  z-index: 3;
-  top: 40%;
-  border: 1px solid var(--firm);
-  border-width: 0 0 1px 1px;
-  transform: rotate(-45deg);
-  transition: transform 0.3s ease-in-out,
-}
-
-.option-contact {
-  border-radius: 0;
-  font-size: 14px;
-  cursor: pointer;
-  background-color: none;
-  transition: background-color 0.3s ease-in-out,
-}
-
-.option-contact:hover {
-  background-color: var(--firm);
-}
-
-.input-contact {
-  padding: 5px;
-  width: 329px;
-  height: 39px;
-  outline: none;
-  border: 1px solid var(--txt_grey);
 }
 
 /* разное */
