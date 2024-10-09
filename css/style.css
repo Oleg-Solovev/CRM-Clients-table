@@ -21,8 +21,9 @@ svg {
 
 :root {
   --black: #333;
+  --light-grey: #E7E5EB;
   --txt_grey: #B0B0B0;
-  --grey: #C8C5D1;
+  --grey: #d8d6dc;
   --firm: #9873FF;
   --red: #F06A4D;
   --orange: #E6B127;
@@ -114,7 +115,20 @@ body {
   position: relative;
 }
 
-.add-client-btn {
+.add-contact-btn {
+  background-image: url(../img/add-contact-btn-1.svg);
+  background-position: 7px 12px;
+  background-repeat: no-repeat;
+  transition: background-image 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.add-contact-btn:hover {
+  color: var(--firm);
+  background-image: url(../img/add-contact-btn-2.svg);
+}
+
+.add-client-btn,
+.client-btn {
   color: var(--firm);
   border: 1px solid var(--firm);
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
@@ -143,12 +157,9 @@ body {
   background-color: #8052FF;
 }
 
-.add-contact-btn svg {
-  margin-right: 3px;
-  transform: translateY(3px);
-}
-
 .client-btn {
+  width: fit-content;
+  padding: 12.5px 35px;
   color: #FFF;
   background-color: var(--firm);
 }
@@ -156,6 +167,7 @@ body {
 .delete-btn,
 .cancel-btn {
   font-weight: 400;
+  padding: 5px 20px;
   text-decoration: underline;
 }
 
@@ -186,24 +198,13 @@ body {
   color: var(--red);
 }
 
-.add-contact-btn {
-  background-image: url(../img/add-contact-btn.svg);
-  background-position: 7px 12px;
-  background-repeat: no-repeat;
-  transition: color 0.3s ease-in-out;
-}
-
-.add-contact-btn:hover {
-  color: var(--firm);
-}
-
 .delete-contact-btn {
   position: relative;
-  width: 39px;
-  height: 39px;
+  width: 38px;
+  height: 38px;
   cursor: pointer;
-  border: 0;
-  background-color: #E7E5EB;
+  border: 1px solid var(--txt_grey);
+  background-color: var(--grey);
   background-image: url(../img/delete-contact-btn-1.svg);
   background-repeat: no-repeat;
   background-position: center center;
@@ -313,6 +314,7 @@ body {
   align-items: center;
   width: 100%;
   gap: 20px;
+  margin-bottom: 26px;
 }
 
 .form__field {
@@ -332,7 +334,9 @@ body {
 
 .form__input {
   width: 500px;
-  height: 40px;
+  height: 30px;
+  border: 0;
+  border-bottom: 1px solid var(--txt_grey);
 }
 
 .form__input:focus {
@@ -341,12 +345,14 @@ body {
 
 .form__add-contact {
   width: 100%;
-  background-color: var(--grey);
+  margin-bottom: 25px;
+  background-color: var(--light-grey);
 }
 
 .form__btn-box {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .text-massage {
@@ -370,7 +376,7 @@ body {
   height: 8px;
   z-index: 3;
   border: 1px solid var(--firm);
-  border-width: 0 0 1px 1px;
+  border-width: 0 0 2px 2px;
   transform: rotate(-45deg);
   pointer-events: none;
 }
@@ -393,7 +399,7 @@ body {
   cursor: pointer;
   border-radius: 0;
   border: 1px solid var(--txt_grey);
-  background-color: #E7E5EB;
+  background-color: var(--grey);
   appearance: none;
 }
 
@@ -412,8 +418,9 @@ body {
 .input-contact {
   padding: 5px;
   width: 352px;
-  height: 39px;
+  height: 38px;
   outline: none;
+  background-color: var(--light-grey);
   border: 1px solid var(--txt_grey);
 }
 
