@@ -242,6 +242,7 @@ body {
 
 .btn-modal-reset {
   position: absolute;
+  padding: 0;
   top: 15px;
   right: 15px;
   width: 30px;
