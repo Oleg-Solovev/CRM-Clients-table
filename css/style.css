@@ -89,14 +89,15 @@ body {
 }
 
 .visually-hidden {
-  position: absolute;
+  /* position: absolute;
   width: 1px;
   height: 1px;
   margin: -1px;
   border: 0;
   padding: 0;
-  clip: rect(0, 0, 0, 0);
-  overflow: hidden;
+  clip: rect(0, 0, 0, 0); */
+  /* overflow: hidden; */
+  visibility: hidden;
 }
 
 
@@ -213,7 +214,7 @@ body {
 
 .delete-contact-btn:hover {
   background-image: url(../img/delete-contact-btn-2.svg);
-  border: 2px solid var(--red);
+  border: 1px solid var(--red);
 }
 
 .delete-contact-btn::before {
@@ -301,7 +302,6 @@ body {
 }
 
 .modal__title--delate {
-  margin: 0;
   text-align: center;
 }
 
@@ -358,6 +358,7 @@ body {
 
 .text-massage {
   margin: 0;
+  margin-bottom: 25px;
 }
 
 .eror {
