@@ -6,6 +6,15 @@ async function apiCRM() {
     console.log(data);
   }
 
+  // Функция фильтра поискового запроса
+  function debounce(callback, delay) {
+    let timeout;
+    return function () {
+      clearTimeout(timeout);
+      timeout = setTimeout(callback, delay);
+    }
+  }
+
   //  Функция проверки списка пользователей на сервере
   async function checkLocalServer() {
     const response = await fetch('http://localhost:3000/api/clients', {
@@ -410,6 +419,12 @@ async function apiCRM() {
     const select = document.createElement("select");
     select.classList.add("select-contact");
 
+    // работа библиотеки Choices
+    // const choices = new Choices(select, {
+    //   searchEnabled: false,
+    //   itemSelectText: ''
+    // })
+
     select.onclick = function () {
       selectWrapper.classList.toggle('is-open');
     }
@@ -458,6 +473,24 @@ async function apiCRM() {
     }
 
     return newContact
+  }
+
+  // функция фильтрации таблицы по запросу
+  function filterClients() {
+    const text = filterRequest.value;
+    cl(text)
+    let filterArr = [];
+    if (typeof text === 'string') {
+      filterArr = clientsList.filter(el => {
+        el.name.toLowerCase().includes(text.toLowerCase());
+        el.surname.toLowerCase().includes(text.toLowerCase());
+        el.lastName.toLowerCase().includes(text.toLowerCase());
+      })
+    };
+    if (typeof text === 'number') {
+      filterArr = clientsList.filter(el => +el[id] === text);
+    };
+    return renderClientsList(filterArr);
   }
 
 
@@ -610,7 +643,6 @@ async function apiCRM() {
       ? -1
       : 0);
     dir == true ? dir = false : dir = true;
-    // cl(`${prop}Sort`);
     let sortImg = document.getElementById(`${prop}Sort`);
     if (prop === 'surname') {
       sortImg.classList.toggle('sortA-123');
@@ -640,7 +672,7 @@ async function apiCRM() {
 
   // Создание статичных элементов html
   const openFormBtn = document.getElementById('addClientBtn');
-  let filterRequest = document.getElementById('filterRequest');
+  const filterRequest = document.getElementById('filterRequest');
   const container = document.getElementById('container');
 
   // открытие модального окна "Новый клиент"
@@ -648,16 +680,12 @@ async function apiCRM() {
     container.append(createModal('Новый клиент'));
   })
 
-
   //  Загрузка шапки и тела таблицы пользователей
   const tbody = document.getElementById('tbody');
   const tableID = document.getElementById('tableID');
   const tableFIO = document.getElementById('tableFIO');
   const tableDate = document.getElementById('tableDate');
   const tableChanges = document.getElementById('tableChanges');
-  // const tableContacts = document.getElementById('tableContacts');
-  // const tableActions = document.getElementById('tableActions');
-
 
   // Индикатор загрузки анимация
   const loader = document.querySelector(".loader");
@@ -668,6 +696,9 @@ async function apiCRM() {
     renderClientsList(clientsList);
   }, 2000);
 
+
+  // Запуск функции фильтра
+  filterRequest.addEventListener('keydown', debounce(filterClients(), 3000));
 
   // СОРТИРОВКА. События кликов на соответствующие колонки для сортировки
   let dir = true;
