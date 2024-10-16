@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM система</title>
     <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/base.min.css" />
     <link rel="stylesheet" href="css/style.css">
     <script src="main.js" defer></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+
 </head>
 
 <body>
@@ -39,8 +42,8 @@
                     <th class="table-text" id="tableChanges">Последние изменения
                         <div class="table__sort sort-123" id="updatedAtSort"></div>
                     </th>
-                    <th class="table-text" id="tableContacts">Контакты</th>
-                    <th class="table-text" id="tableActions">Действия</th>
+                    <th class="table-text">Контакты</th>
+                    <th class="table-text">Действия</th>
                 </tr>
             </thead>
             <tbody class="tbody" id="tbody"></tbody>
@@ -58,93 +61,6 @@
             Добавить клиента</button>
     </section>
 
-    <!-- модальное окно "Изменить данные" -->
-    <!-- <div class="form-change modal-parent " id="formChange">
-        <div class="modal-wrapper">
-            <div class="modal">
-                <button class="btn-change-reset" id="btnChangeReset"></button>
-                <h2 class="modal__title" id="modalTitle">
-                    <span class="modal__title-bold">Изменить данные</span>
-                </h2>
-                <form class="form__change" autocomplete="off">
-                    <label class="form__field">
-                        <span class="form__text">Фамилия<span>*</span></span>
-                        <input class="form__input input-text" type="text" id="changeSurname" name="surname"
-                            autocomplete="off" required>
-                    </label>
-                    <label class="form__field">
-                        <span class="form__text">Имя<span>*</span></span>
-                        <input class="form__input input-text" type="text" id="changeName" name="name" autocomplete="off"
-                            required>
-                    </label>
-                    <label class="form__field">
-                        <span class="form__text">Отчество</span>
-                        <input class="form__input input-text" type="text" id="changeLastname" name="lastname"
-                            autocomplete="off" required>
-                    </label>
-                    <div class="form__add-contact" id="formChangeContact"></div>
-                    <div class="form-btn-box">
-                        <button class="btn save-client-btn" id="saveChangeContactBtn">Сохранить</button>
-                        <button class="btn delete-btn" id="deleteChangeBtn">Удалить клиента</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- модальное окно Новый клиент-->
-    <!-- <div class="form-new-client modal-parent" id="formNewClient">
-        <div class="modal-wrapper">
-            <div class="modal">
-                <h2 class="modal__title">Новый клиент</h2>
-                <form class="form__new" autocomplete="off">
-                    <label class="form__field">
-                        <span class="form__text">Фамилия*</span>
-                        <input class="form__input input-text" type="text" id="newSurname" name="surname"
-                            autocomplete="off" required>
-                    </label>
-                    <label class="form__field">
-                        <span class="form__text">Имя*</span>
-                        <input class="form__input input-text" type="text" id="newName" name="name" autocomplete="off"
-                            required>
-                    </label>
-                    <label class="form__field">
-                        <span class="form__text">Отчество</span>
-                        <input class="form__input input-text" type="text" id="newLastname" name="lastname"
-                            autocomplete="off" required>
-                    </label>
-                    <div class="form__add-contact" id="formAddContact"></div>
-                    <div class="form-btn-box">
-                        <button class="btn save-client-btn" id="saveNewClientBtn">Сохранить</button>
-                        <button class="btn cancel-contact-btn" id="cancelBtn">Отмена</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- модальное окно "Удалить клиента" -->
-    <!-- <div class="form-delete-client modal-parent" id="formDeleteClient">
-        <div class="modal-wrapper">
-            <div class="modal">
-                <form class="form__delate" autocomplete="off">
-                    <h2 class="modal__title modal__title--delate">Удалить клиента</h2>
-                    <p class="text-massage">Вы действительно хотите удалить данного клиента?</p>
-                    <div class="form-btn-box">
-                        <button class="btn save-client-btn" id="deleteContactBtn">Удалить</button>
-                        <button class="btn cancel-contact-btn" id="cancelDeleteBtn">Отмена</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- модальные окна общая обёртка -->
-    <!-- <div class="modal__parent" id="modalParent">
-        <div class="modal__wrapper">
-            <div class="modal__form-wrapper" id="modalFormWrapper"></div>
-        </div>
-    </div> -->
 
 </body>
 
