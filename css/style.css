@@ -87,6 +87,7 @@ body {
   animation: move 1s linear infinite;
 }
 
+/* Для индикатора загрузки */
 @keyframes move {
   to {
     transform: rotate(360deg);
@@ -94,14 +95,6 @@ body {
 }
 
 .visually-hidden {
-  /* position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  border: 0;
-  padding: 0;
-  clip: rect(0, 0, 0, 0); */
-  /* overflow: hidden; */
   visibility: hidden;
 }
 
@@ -260,7 +253,7 @@ body {
   background-repeat: no-repeat;
 }
 
-/* Модальное окно */
+/* Модальные окна */
 
 .modal__parent {
   position: fixed;
@@ -268,16 +261,9 @@ body {
   z-index: 500;
   display: flex;
   overflow-y: auto;
-  /* opacity: 0;
-  visibility: hidden; */
   background-color: rgba(0, 0, 0, .8);
   transition: opacity .3s ease-in-out, visibility .3s ease-in-out;
 }
-
-/* .modal__parent--open {
-  opacity: 1;
-  visibility: visible;
-} */
 
 .modal__wrapper {
   margin: auto;
@@ -393,15 +379,16 @@ body {
   transform: rotate(135deg);
 }
 
-.newContact-box {
+.contacts {
   display: flex;
   margin-bottom: 15px;
   border: 1px solid var(--grey);
 }
 
-.select-contact {
+.js-choice {
   font-size: 14px;
   padding: 10px;
+  margin: 0;
   padding-right: 30px;
   outline: none;
   cursor: pointer;
@@ -414,13 +401,13 @@ body {
 .option-contact {
   border-radius: 0;
   font-size: 14px;
-  cursor: pointer;
-  background-color: none;
-  transition: background-color 0.3s ease-in-out,
+  background-color: var(--light-grey);
+  transition: background-color 0.3s ease-in-out;
 }
 
 .option-contact:hover {
-  background-color: var(--firm);
+  background-color: var(--grey);
+  cursor: pointer;
 }
 
 .input-contact {
@@ -430,6 +417,16 @@ body {
   outline: none;
   background-color: var(--light-grey);
   border: 1px solid var(--txt_grey);
+}
+
+.error .form__field {
+  border-color: red;
+}
+
+.error-label {
+  display: block;
+  color: red;
+  margin-bottom: 10px;
 }
 
 /* Таблица */
@@ -444,7 +441,7 @@ table {
   margin-right: 5px;
 }
 
-td,
+.table__cell,
 th {
   text-align: left;
   padding: 5px 5px;
@@ -459,7 +456,7 @@ th {
 
 .tbody {
   width: 100%;
-  height: 300px;
+  min-height: 300px;
   background-color: #FFF;
 }
 
@@ -474,16 +471,6 @@ th {
 
 .add-box {
   margin-bottom: 20px;
-}
-
-.error .form__field {
-  border-color: red;
-}
-
-.error-label {
-  display: block;
-  color: red;
-  margin-bottom: 10px;
 }
 
 .table__sort {
@@ -511,16 +498,16 @@ th {
 }
 
 /* иконки для контактов */
-.contactsBox {
+.contacts__box-item {
   display: flex;
   max-width: 100px;
 }
 
-.contactsBoxWrap {
+.contacts__box-item--wrap {
   flex-wrap: wrap;
 }
 
-.contacts {
+.contacts__item {
   position: relative;
   width: 16px;
   height: 16px;
@@ -531,11 +518,11 @@ th {
   transition: opacity 0.3s ease-in-out, border 0.3s ease-in-out;
 }
 
-.contacts:hover {
+.contacts__item:hover {
   opacity: 1;
 }
 
-.contacts::before {
+.contacts__item::before {
   content: attr(tooltip);
   position: absolute;
   color: white;
@@ -551,7 +538,7 @@ th {
   opacity: 0;
 }
 
-.contacts:hover::before {
+.contacts__item:hover::before {
   opacity: 1;
   visibility: visible;
   z-index: 10;
@@ -577,5 +564,3 @@ th {
 .fb {
   background-image: url(../img/fb.svg);
 }
-
-/* разное */
