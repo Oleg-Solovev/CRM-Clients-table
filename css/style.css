@@ -202,7 +202,7 @@ body {
   width: 38px;
   height: 38px;
   cursor: pointer;
-  border: 1px solid var(--txt_grey);
+  border: 1px solid var(--grey);
   background-color: var(--grey);
   background-image: url(../img/delete-contact-btn-1.svg);
   background-repeat: no-repeat;
@@ -368,7 +368,7 @@ body {
   left: 80%;
   width: 8px;
   height: 8px;
-  z-index: 3;
+  z-index: 1;
   border: 1px solid var(--firm);
   border-width: 0 0 2px 2px;
   transform: rotate(-45deg);
@@ -395,6 +395,8 @@ body {
   border-radius: 0;
   border: 1px solid var(--txt_grey);
   background-color: var(--grey);
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
 }
 
@@ -405,18 +407,25 @@ body {
   transition: background-color 0.3s ease-in-out;
 }
 
-.option-contact:hover {
-  background-color: var(--grey);
-  cursor: pointer;
-}
-
 .input-contact {
   padding: 5px;
   width: 352px;
   height: 38px;
   outline: none;
   background-color: var(--light-grey);
-  border: 1px solid var(--txt_grey);
+  border: 0;
+}
+
+.choices[data-type*=select-one]::after {
+  display: none;
+}
+
+.choices__inner {
+  border: none;
+  border-radius: 0;
+  width: 120px;
+  min-height: 37px;
+  background-color: var(--grey);
 }
 
 .error .form__field {
