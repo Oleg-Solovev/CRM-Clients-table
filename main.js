@@ -446,6 +446,14 @@ async function apiCRM() {
     deleteContactBtn.setAttribute("tooltip", "Удалить контакт");
     newContact.append(selectWrapper, input, deleteContactBtn)
 
+    // инициализация библиотеки choices
+    const choice = new Choices(select, {
+      searchEnabled: false,
+      itemSelectText: '',
+      shouldSort: false,
+      allowHTML: true,
+    });
+
     // удаление строки контакта
     deleteContactBtn.onclick = function () {
       --contactCounter;
@@ -676,7 +684,7 @@ async function apiCRM() {
     if (event._isClick === true) return
     getSortClientsList('updatedAt');
   });
-  
+
 }
 
 apiCRM();
