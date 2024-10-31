@@ -97,48 +97,44 @@ async function apiCRM() {
     return clientsList
   }
 
-  //  Функция сохранения пользователя на сервере
-  async function saveInLocalServer(item) {
-    const response = await fetch('http://localhost:3000/api/clients', {
-      method: 'POST',
-      body: JSON.stringify(item),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+  //  Функция работы с запросом fetch
+  async function getFetch(method, item = '', id = '') {
+    let response = '';
+    if (item) {
+      response = await fetch(`http://localhost:3000/api/clients/${id}`, {
+        method: method,
+        body: JSON.stringify(item),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+    } else {
+      response = await fetch(`http://localhost:3000/api/clients/${id}`, {
+        method: method
+      });
+    }
     let clientsArr = await response.json();
     return clientsArr
+  }
+
+  //  Функция сохранения пользователя на сервере
+  function saveInLocalServer(item) {
+    return getFetch('POST', item)
   }
 
   //  Функция изменения пользователя на сервере
-  async function changeInLocalServer(item, id) {
-    const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(item),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-    let clientsArr = await response.json();
-    return clientsArr
+  function changeInLocalServer(item, id) {
+    return getFetch('PATCH', item, id)
   }
 
   //  Функция загрузки массива пользователей с сервера
-  async function getFromLocalServer() {
-    const response = await fetch('http://localhost:3000/api/clients', {
-      method: 'GET'
-    });
-    let clientsArr = await response.json();
-    return clientsArr
+  function getFromLocalServer() {
+    return getFetch('GET')
   }
 
   //  Функция удаления пользователя на сервере
-  async function deleteFromLocalServer(id) {
-    const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
-      method: 'DELETE'
-    });
-    let clientsArr = await response.json();
-    return clientsArr
+  function deleteFromLocalServer(id) {
+    return getFetch('DELETE', '', id)
   }
 
   // Функция преобразования даты
@@ -521,7 +517,6 @@ async function apiCRM() {
 
     // Проверка полей контактов
     const allInputsContacts = modalSpace.querySelectorAll('.input-contact');
-    cl(allInputsContacts)
     for (const input of allInputsContacts) {
       let text = input.value.trim();
       removeError(input);
