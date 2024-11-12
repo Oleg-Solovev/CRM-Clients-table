@@ -87,14 +87,38 @@ async function apiCRM() {
       ];
       // сохранение первоначального массива пользователей на сервер
       for (let clientItem of clientsList) {
-        saveInLocalServer(clientItem);
+        getFetch('POST', clientItem);
       };
       // загрузка массива пользователей с сервера
-      clientsList = await getFromLocalServer();
+      clientsList = await getFetch('GET');
     } else {
       clientsList = clientsArr;
     }
     return clientsList
+  }
+
+
+  // функция вывода текста ошибки ответа сервера
+  function textErrorServer(data) {
+
+    let errorMassage = '';
+
+    switch (data) {
+      case 422: errorMassage = "Некорректные данные в аргументе, клиент не создан"; break;
+      case 404: errorMassage = "Клиент с таким ID не найден"; break;
+      case 500: errorMassage = "Что-то пошло не так"; break;
+      default: errorMassage = `Код ошибки: ${data}`; break;
+    }
+
+    cl(errorMassage)
+   
+    const errorLabel = document.createElement('label');
+    errorLabel.classList.add('error-label');
+    errorLabel.textContent = errorMassage;
+    const errorMassageBox = document.querySelector('.form__btn-box');
+    errorLabel.classList.add('error');
+    cl(errorMassageBox)
+    errorMassageBox.prepend(errorLabel);
   }
 
   //  Функция работы с запросом fetch
@@ -113,28 +137,14 @@ async function apiCRM() {
         method: method
       });
     }
-    let clientsArr = await response.json();
-    return clientsArr
-  }
 
-  //  Функция сохранения пользователя на сервере
-  function saveInLocalServer(item) {
-    return getFetch('POST', item)
-  }
+    // если ошибка с сервера, запускаем функцию вывода текста ошибки и выход из функции запроса с сервера
+    if (!response.ok) {
+      textErrorServer(response.status);
+      return false
+    } 
 
-  //  Функция изменения пользователя на сервере
-  function changeInLocalServer(item, id) {
-    return getFetch('PATCH', item, id)
-  }
-
-  //  Функция загрузки массива пользователей с сервера
-  function getFromLocalServer() {
-    return getFetch('GET')
-  }
-
-  //  Функция удаления пользователя на сервере
-  function deleteFromLocalServer(id) {
-    return getFetch('DELETE', '', id)
+    return response
   }
 
   // Функция преобразования даты
@@ -161,7 +171,6 @@ async function apiCRM() {
     element.textContent = text;
     return element
   }
-
 
   // Функция создания элементов для модальных окон
   function createModal(typeModal, clientObj = {}) {
@@ -252,16 +261,22 @@ async function apiCRM() {
           };
 
           // Добавляем нового клиента на сервер или изменяем существующего
+          let response = '';
           if (typeModal === 'Новый клиент') {
-            await saveInLocalServer(newClient);
+            response = await getFetch('POST', newClient);
           } else {
             if (typeModal === 'Изменить данные') {
-              await changeInLocalServer(newClient, clientObj.id);
+              response = await getFetch('PATCH', newClient, clientObj.id);
             }
           };
-          modalSpace.innerHTML = '';
-          clientsList = await getFromLocalServer();
-          renderClientsList(clientsList);
+
+          // при положительном запросе отрисовка таблицы клиентов
+          cl(response)
+          if (response) {
+            modalSpace.innerHTML = '';
+            clientsList = await (await getFetch('GET')).json();
+            renderClientsList(clientsList);
+          }
         }
       })
 
@@ -313,8 +328,9 @@ async function apiCRM() {
       deleteBtn.addEventListener("click", async e => {
         e.preventDefault();
         modalSpace.innerHTML = '';
-        await deleteFromLocalServer(clientObj.id);
-        clientsList = await getFromLocalServer();
+        await getFetch('DELETE', '', clientObj.id);
+        // clientsList = await getFetch('GET');
+        clientsList = await (await getFetch('GET')).json();
         renderClientsList(clientsList);
       });
       return modalParent
@@ -500,6 +516,7 @@ async function apiCRM() {
         parent.classList.remove('error');
       }
     }
+
     let accept = true;
 
     // Проверка текстовых полей
