@@ -98,29 +98,6 @@ async function apiCRM() {
   }
 
 
-  // функция вывода текста ошибки ответа сервера
-  function textErrorServer(data) {
-
-    let errorMassage = '';
-
-    switch (data) {
-      case 422: errorMassage = "Некорректные данные в аргументе, клиент не создан"; break;
-      case 404: errorMassage = "Клиент с таким ID не найден"; break;
-      case 500: errorMassage = "Что-то пошло не так"; break;
-      default: errorMassage = `Код ошибки: ${data}`; break;
-    }
-
-    cl(errorMassage)
-   
-    const errorLabel = document.createElement('label');
-    errorLabel.classList.add('error-label');
-    errorLabel.textContent = errorMassage;
-    const errorMassageBox = document.querySelector('.form__btn-box');
-    errorLabel.classList.add('error');
-    cl(errorMassageBox)
-    errorMassageBox.prepend(errorLabel);
-  }
-
   //  Функция работы с запросом fetch
   async function getFetch(method, item = '', id = '') {
     let response = '';
@@ -138,11 +115,12 @@ async function apiCRM() {
       });
     }
 
-    // если ошибка с сервера, запускаем функцию вывода текста ошибки и выход из функции запроса с сервера
+    // если ошибка с сервера, запуск функции создания модального окна с текстом ошибки
     if (!response.ok) {
-      textErrorServer(response.status);
+      cl(response)
+      createModal('Ошибка', response);
       return false
-    } 
+    }
 
     return response
   }
@@ -313,6 +291,23 @@ async function apiCRM() {
       }
     }
 
+    // Для модального окна "Ошибка"
+    if (typeModal === 'Ошибка') {
+      const errorMassage = document.createElement('p');
+      errorMassage.classList.add('error-label');
+      cl(clientObj.status)
+      let text = '';
+      switch (clientObj.status) {
+        case 422: text = "Некорректные данные в аргументе, клиент не создан"; break;
+        case 404: text = "Клиент с таким ID не найден"; break;
+        case 500: text = "Что-то пошло не так"; break;
+        default: text = `Код ошибки: ${clientObj.status}`; break;
+      }
+      errorMassage.textContent = text;
+      formBtnBox.append(cancelBtn);
+      modalFormWrapper.append(errorMassage, formBtnBox);
+      return modalParent
+    }
 
     // Для модального окна Удалить клиента
     if (typeModal === 'Удалить клиента') {
