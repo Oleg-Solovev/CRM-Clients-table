@@ -271,7 +271,7 @@ body {
   min-height: 400px;
 }
 
-.modal__form-wrapper {
+.form {
   position: relative;
   margin: 30px 0;
   width: 100%;
@@ -301,7 +301,7 @@ body {
   margin: 10px;
 }
 
-.form {
+.form__input-wapper {
   display: flex;
   flex-direction: column;
   align-items: center;
