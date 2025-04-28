@@ -1,190 +1,36 @@
+
+import * as components from "./components.js"
+import { downloadFromLS, checkLS, getFromLS } from "./localStorageBase.js"
+import { debounce } from "./filters.js"
+
 // Подключение библиотеки jQuery
 $(document).ready()
 
 
-// Функция фильтра поискового запроса
-function debounce(callback, delay) {
-  let timeout;
-  return function () {
-    clearTimeout(timeout);
-    timeout = setTimeout(callback, delay);
-  }
-}
 
-// Функция сохранения массива пользователей в LS 
-function saveInLocalStorage(name, data) {
-  localStorage.setItem(name, JSON.stringify(data));
-}
 
-// Функция загрузки массива пользователей из LS 
-function downloadFromLocalStorage(name) {
-  let data = localStorage.getItem(name);
-  return data ? JSON.parse(data) : [];
-}
 
-//  Функция проверки списка пользователей в LS
-function checkLocalServer() {
 
-  let clientsArr = downloadFromLocalStorage('clientsArr');
-  if (clientsArr.length === 0) {
-    clientsList = [
-      {
-        id: Math.round(Math.random() * 1000),
-        name: 'Олег',
-        surname: 'Соловьёв',
-        lastName: 'Валерьевич',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        contacts: [
-          {
-            type: 'phone',
-            value: '+79032067266'
-          },
-          {
-            type: 'mail',
-            value: 'so555@bk.ru'
-          },
-          {
-            type: 'vk',
-            value: 'https://vk.com/id2003039'
-          },
-          {
-            type: 'tg',
-            value: 'https://t.me/Oleg7266'
-          }
-        ]
-      },
-      {
-        id: Math.round(Math.random() * 1000),
-        name: 'Павел',
-        surname: 'Балов',
-        lastName: 'Сергеевич',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        contacts: [
-          {
-            type: 'phone',
-            value: '+71234567890'
-          },
-          {
-            type: 'mail',
-            value: 'abc@bk.ru'
-          },
-          {
-            type: 'vk',
-            value: 'https://vk.com/id2003039'
-          }
-        ]
-      },
-      {
-        id: Math.round(Math.random() * 1000),
-        name: 'Вячеслав',
-        surname: 'Иванов',
-        lastName: 'Павлович',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        contacts: [
-          {
-            type: 'phone',
-            value: '+71234567890'
-          },
-          {
-            type: 'mail',
-            value: 'abc@bk.ru'
-          },
-          {
-            type: 'vk',
-            value: 'https://vk.com/id2003039'
-          }
-        ]
-      },
-    ];
-    // сохранение первоначального массива пользователей на сервер
-    saveInLocalStorage('clientsArr', clientsList);
-  } else {
-    clientsList = clientsArr;
-  }
-  return clientsList
-}
 
-//  Функция работы с запросом в LS
-function getFetch(item = '', id = '') {
-  if (item) {
-    let clientsList = downloadFromLocalStorage('clientsArr');
-    let newClientsList = clientsList.filter(client => client.id !== id);
-    item.updatedAt = new Date();
-    newClientsList.push(item);
-    saveInLocalStorage('clientsArr', newClientsList);
-
-  } else {
-    let clientsList = downloadFromLocalStorage('clientsArr');
-    let newClientsList = clientsList.filter(client => client.id !== id)
-    saveInLocalStorage('clientsArr', newClientsList);
-  };
-}
-
-// Функция преобразования даты
-function getDateFormat(data) {
-  let date = new Date(data);
-  let result = date.getDate() < 10 ? '0' + date.getDate() + '.' : date.getDate() + '.';
-  result = result + (date.getMonth() < 9 ? '0' + (date.getMonth() + 1) + '.' : (date.getMonth() + 1) + '.');
-  result = result + date.getFullYear();
-  return result
-}
-
-// Функция преобразования времени
-function getTimeFormat(data) {
-  let time = new Date(data);
-  let result = time.getHours() < 10 ? '0' + time.getHours() + ':' : time.getHours() + ':';
-  result = result + (time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes());
-  return result
-}
-
-// Функция создания инпута с label
-function createInput(name, placeholder) {
-  const newLabel = createEl('label', 'form__field');
-  const labelText = createEl('span', 'form__text', placeholder);
-  const labelStar = createEl('span', 'star', '*');
-  labelText.append(labelStar);
-  newLabel.append(labelText);
-  const newInput = createEl('input', 'form__input');
-  newInput.name = name;
-  newInput.type = 'text';
-  newInput.autocomplete = 'off';
-  newInput.required = true;
-  newLabel.append(newInput);
-  return newLabel
-}
-
-// Функция создания DOM элементов
-function createEl(el, className = 'x', text = '') {
-  const element = document.createElement(el);
-  element.classList.add(className);
-  if (el === 'button') {
-    element.classList.add('btn');
-  };
-  element.textContent = text;
-  return element
-}
 
 // Функция создания модальных окон
 function createModal(typeModal, clientObj = {}) {
 
   // Общие элементы для всех модальных окон
-  const modalParent = createEl('div', 'modal__parent');
-  const modalWrapper = createEl('div', 'modal__wrapper');
-  const modalFormWrapper = createEl('form', 'form');
+  const modalParent = components.createEl('div', 'modal__parent');
+  const modalWrapper = components.createEl('div', 'modal__wrapper');
+  const modalFormWrapper = components.createEl('form', 'form');
   modalFormWrapper.autocomplete = 'off';
-  const btnModalReset = createEl('button', 'btn-modal-reset');
-  const modalTitle = createEl('h2', 'modal__title');
+  const btnModalReset = components.createEl('button', 'btn-modal-reset');
+  const modalTitle = components.createEl('h2', 'modal__title');
   if (typeModal === 'Удалить клиента') {
     modalTitle.classList.add('modal__title--delate');
   }
-  const modalTitleSpan = createEl('span', 'modal__title-bold', typeModal);
+  const modalTitleSpan = components.createEl('span', 'modal__title-bold', typeModal);
   modalTitle.append(modalTitleSpan);
 
-  const formBtnBox = createEl('div', 'form__btn-box');
-  const cancelBtn = createEl('button', 'cancel-btn', 'Отмена');
+  const formBtnBox = components.createEl('div', 'form__btn-box');
+  const cancelBtn = components.createEl('button', 'cancel-btn', 'Отмена');
   modalFormWrapper.append(btnModalReset, modalTitle);
   modalWrapper.append(modalFormWrapper);
   modalParent.append(modalWrapper);
@@ -205,14 +51,14 @@ function createModal(typeModal, clientObj = {}) {
   // Общие элементы для модальных окон: Новый клиент и Изменить данные
   if (typeModal === 'Новый клиент' || typeModal === 'Изменить данные') {
 
-    const modalForm = createEl('div', 'form__input-wapper');
-    const surnameInput = createInput('surname', 'Фамилия');
-    const nameInput = createInput('name', 'Имя');
-    const lastNameInput = createInput('lastName', 'Отчество');
-    const formAddContact = createEl('div', 'form__add-contact');
-    const formAddContactWrapp = createEl('div', 'form__add-contact-wrapp');
-    const btnAddContact = createEl('button', 'add-contact-btn', 'Добавить контакт');
-    const saveClientBtn = createEl('button', 'client-btn', 'Сохранить');
+    const modalForm = components.createEl('div', 'form__input-wapper');
+    const surnameInput = components.createInput('surname', 'Фамилия');
+    const nameInput = components.createInput('name', 'Имя');
+    const lastNameInput = components.createInput('lastName', 'Отчество');
+    const formAddContact = components.createEl('div', 'form__add-contact');
+    const formAddContactWrapp = components.createEl('div', 'form__add-contact-wrapp');
+    const btnAddContact = components.createEl('button', 'add-contact-btn', 'Добавить контакт');
+    const saveClientBtn = components.createEl('button', 'client-btn', 'Сохранить');
     saveClientBtn.classList.add('client-btn-save');
     saveClientBtn.type = 'submit';
     modalForm.append(surnameInput, nameInput, lastNameInput);
@@ -243,7 +89,7 @@ function createModal(typeModal, clientObj = {}) {
     $(saveClientBtn).on("click", async e => {
       e.preventDefault();
       if (validationForm(modalForm)) {
-        let contacts = [];
+        const contacts = [];
         const contactType = document.querySelectorAll('.js-choice');
         const contactValue = document.querySelectorAll('.input-contact');
 
@@ -254,7 +100,7 @@ function createModal(typeModal, clientObj = {}) {
           })
         }
 
-        let newClient = {
+        const newClient = {
           id: Math.round(Math.random() * 1000),
           name: nameInput.querySelector('.form__input').value.trim(),
           surname: surnameInput.querySelector('.form__input').value.trim(),
@@ -266,15 +112,15 @@ function createModal(typeModal, clientObj = {}) {
 
         // Добавляем нового клиента на сервер или изменяем существующего
         if (typeModal === 'Новый клиент') {
-          getFetch(newClient);
+          getFromLS(newClient);
         } else {
           if (typeModal === 'Изменить данные') {
-            getFetch(newClient, clientObj.id);
+            getFromLS(newClient, clientObj.id);
           }
         };
 
         // при положительном запросе отрисовка таблицы клиентов
-        let clientsArr = downloadFromLocalStorage('clientsArr');
+        let clientsArr = downloadFromLS('clientsArr');
         if (clientsArr.length !== 0) {
           $('#modalSpace').empty();
           renderClientsList(clientsArr);
@@ -290,9 +136,9 @@ function createModal(typeModal, clientObj = {}) {
 
     // Для модального окна "Изменить данные"
     if (typeModal === 'Изменить данные') {
-      const deleteChangeBtn = createEl('button', 'delete-btn', 'Удалить клиента');
+      const deleteChangeBtn = components.createEl('button', 'delete-btn', 'Удалить клиента');
       formBtnBox.append(saveClientBtn, deleteChangeBtn);
-      let titleID = createEl('span', 'table-text', `ID: ${clientObj.id}`);
+      const titleID = components.createEl('span', 'table-text', `ID: ${clientObj.id}`);
       titleID.classList.add('span-text');
       modalTitle.append(titleID);
 
@@ -317,22 +163,17 @@ function createModal(typeModal, clientObj = {}) {
   // Для модального окна Удалить клиента
   if (typeModal === 'Удалить клиента') {
     modalTitle.classList.add('modal__title--delate');
-    // const textMassage = $('<p>').addClass('text-massage');
-
-    const textMassage = document.createElement('p');
-    textMassage.classList.add('text-massage');
-    textMassage.textContent = 'Вы действительно хотите удалить данного клиента?';
-    const deleteBtn = createEl('button', 'client-btn', 'Удалить');
-    // deleteBtn.classList.add('client-btn-delete');
+    const textMassage = components.createEl('p', 'text-massage', 'Вы действительно хотите удалить данного клиента?');
+    const deleteBtn = components.createEl('button', 'client-btn', 'Удалить');
     formBtnBox.append(deleteBtn, cancelBtn);
     modalFormWrapper.append(textMassage, formBtnBox);
 
     // удаление клиента из базы LS
-    $('.client-btn-delete').on("click", e => {
+    $('.client-btn').on("click", e => {
       e.preventDefault();
       $('#modalSpace').empty();
-      getFetch('', clientObj.id);
-      clientsList = downloadFromLocalStorage('clientsArr');
+      getFromLS('', clientObj.id);
+      clientsList = downloadFromLS('clientsArr');
       renderClientsList(clientsList);
     });
     return modalParent
@@ -343,7 +184,7 @@ function createModal(typeModal, clientObj = {}) {
 // Функция, возвращая новый контакт
 function getNewContact(obj = {}) {
   // Массив типов контактов
-  let contactsTypeArr = [
+  const contactsTypeArr = [
     {
       text: "Телефон",
       value: "phone"
@@ -367,29 +208,29 @@ function getNewContact(obj = {}) {
   ]
 
   // бокс с контактом
-  let newContact = createEl('div', 'contacts');
+  const newContact = components.createEl('div', 'contacts');
 
   // создание селекта
-  const selectWrapper = createEl('div', 'select-wrapper');
-  const select = createEl('select', 'js-choice');
+  const selectWrapper = components.createEl('div', 'select-wrapper');
+  const select = components.createEl('select', 'js-choice');
 
   select.onclick = function () {
     selectWrapper.classList.toggle('is-open');
   }
 
   for (let i = 0; i < contactsTypeArr.length; i++) {
-    const option = createEl('option', 'option-contact', contactsTypeArr[i].text);
+    const option = components.createEl('option', 'option-contact', contactsTypeArr[i].text);
     option.value = contactsTypeArr[i].value;
     select.append(option);
   }
   selectWrapper.append(select);
 
   // создание инпута
-  const input = createEl('input', 'input-contact');
+  const input = components.createEl('input', 'input-contact');
   input.type = "text";
   obj.value ? input.value = obj.value : input.placeholder = 'Введите данные контакта';
 
-  const deleteContactBtn = createEl('button', 'delete-contact-btn');
+  const deleteContactBtn = components.createEl('button', 'delete-contact-btn');
   $(deleteContactBtn).attr("tooltip", "Удалить контакт");
   newContact.append(selectWrapper, input, deleteContactBtn)
 
@@ -406,9 +247,11 @@ function getNewContact(obj = {}) {
     --contactCounter;
 
     if (contactCounter < 10) {
-      let btnAddContact = document.querySelector('.add-contact-btn');
+      // const btnAddContact = document.querySelector('.add-contact-btn');
+      const btnAddContact = $('.add-contact-btn');
+
       if (btnAddContact.classList.contains('visually-hidden')) {
-        $('btnAddContact').removeClass('visually-hidden');
+        $('.btnAddContact').removeClass('.visually-hidden');
       }
       newContact.remove();
     }
@@ -416,17 +259,6 @@ function getNewContact(obj = {}) {
   return newContact
 }
 
-// функция фильтрации таблицы по запросу
-function filterClients() {
-  const text = filterRequest.value;
-  const filterArr = clientsList.filter(el =>
-    el.name.toLowerCase().includes(text.toLowerCase())
-    || el.surname.toLowerCase().includes(text.toLowerCase())
-    || el.lastName.toLowerCase().includes(text.toLowerCase())
-    || el.id == text
-  )
-  return renderClientsList(filterArr);
-}
 
 // Функция валидации формы
 function validationForm(form) {
@@ -435,9 +267,7 @@ function validationForm(form) {
   function createError(input, text) {
     // Получить родителя элемента (parentNode)
     const parent = input.parentNode;
-    const errorLabel = document.createElement('label');
-    errorLabel.classList.add('error-label');
-    errorLabel.textContent = text;
+    const errorLabel = components.createEl('label', 'error-label', text);
     parent.classList.add('error');
     parent.append(errorLabel);
   }
@@ -469,7 +299,8 @@ function validationForm(form) {
   // Проверка полей контактов
   const allInputsContacts = modalSpace.querySelectorAll('.input-contact');
   for (const input of allInputsContacts) {
-    let text = input.value.trim();
+    const text = input.value.trim();
+    // let text = input.value.trim();
     removeError(input);
     if (text.length < 3) {
       createError(input, 'Должно быть не менее 3 символов!');
@@ -482,55 +313,34 @@ function validationForm(form) {
 
 // Функция вывода одного пользователя в таблицу 
 function createClientItem(clientObj) {
-  const clientTr = createEl('tr');
-  const idTd = createEl('td', 'table-text', clientObj.id);
-  const fulNameTd = createEl('td', 'table__cell', `${clientObj.surname} ${clientObj.name} ${clientObj.lastName}`);
+
+  const clientTr = components.createEl('tr');
+  const idTd = components.createEl('td', 'table-text', clientObj.id);
+  const fulNameTd = components.createEl('td', 'table__cell', `${clientObj.surname} ${clientObj.name} ${clientObj.lastName}`);
   //  сделать отдельную функцию для createdAtTd и updatedAtTd как двух типов
-  const createdAtTd = createEl('td');
-  const createdAtTdDate = createEl('span', 'table__date', getDateFormat(clientObj.createdAt));
-  const createdAtTdTime = createEl('span', 'table-text', getTimeFormat(clientObj.createdAt));
+  const createdAtTd = components.createEl('td');
+  const createdAtTdDate = components.createEl('span', 'table__date', components.getDateFormat(clientObj.createdAt));
+  const createdAtTdTime = components.createEl('span', 'table-text', components.getTimeFormat(clientObj.createdAt));
   createdAtTdTime.classList.add('span-text');
 
-  const updatedAtTd = createEl('td');
-  const updatedAtTdDate = createEl('span', 'table__date', getDateFormat(clientObj.updatedAt));
-  const updatedAtTdTime = createEl('span', 'table-text', getTimeFormat(clientObj.updatedAt));
+  const updatedAtTd = components.createEl('td');
+  const updatedAtTdDate = components.createEl('span', 'table__date', components.getDateFormat(clientObj.updatedAt));
+  const updatedAtTdTime = components.createEl('span', 'table-text', components.getTimeFormat(clientObj.updatedAt));
   updatedAtTdTime.classList.add('span-text');
 
-  const contactsTd = createEl('td');
-  const contactsBox = createEl('div', 'contacts__box-item');
+  const contactsTd = components.createEl('td');
+  const contactsBox = components.createEl('div', 'contacts__box-item');
+  contactsBox.classList.add(`contacts__box-item-${clientObj.id}`);
   contactsTd.append(contactsBox);
-  const actionTd = createEl('td', 'btn-box');
-  const changeBtn = createEl('button', 'btn-change', 'Изменить');
-  const removeBtn = createEl('button', 'btn-reset', 'Удалить');
+
+  const actionTd = components.createEl('td', 'btn-box');
+  const changeBtn = components.createEl('button', 'btn-change', 'Изменить');
+  const removeBtn = components.createEl('button', 'btn-reset', 'Удалить');
 
   createdAtTd.append(createdAtTdDate, createdAtTdTime);
   updatedAtTd.append(updatedAtTdDate, updatedAtTdTime);
-
-  // Отрисовка списка контактов
-  clientObj.contacts.forEach((el) => {
-    let linkContact = document.createElement('a');
-    // linkContact.href = `${el.value}`;
-    linkContact.href = el.value;
-    // linkContact.classList.add(`${el.type}`, "contacts__item");
-    linkContact.classList.add(el.type, 'contacts__item');
-    linkContact.target = '_blank';
-    let contactTypeName = 'Контакт';
-    switch (el.type) {
-      case "phone": contactTypeName = "Телефон"; break;
-      case "mail": contactTypeName = "Email"; break;
-      case "tg": contactTypeName = "Телеграм"; break;
-      case "vk": contactTypeName = "Вконтакте"; break;
-      case "fb": contactTypeName = "Фейсбук"; break;
-      default: contactTypeName = "Контакт"; break;
-    }
-    linkContact.setAttribute("tooltip", `${contactTypeName}: ${el.value}`);
-    contactsBox.append(linkContact);
-  })
-
-  if (clientObj.contacts.length > 5) {
-    contactsBox.classList.add('contacts__box-item--wrap');
-  }
   actionTd.append(changeBtn, removeBtn);
+  clientTr.append(idTd, fulNameTd, createdAtTd, updatedAtTd, contactsTd, actionTd)
 
   // открытие модального окна "Изменить данные"
   $(changeBtn).on("click", function () {
@@ -542,7 +352,36 @@ function createClientItem(clientObj) {
     modalSpace.append(createModal('Удалить клиента', clientObj));
   });
 
-  clientTr.append(idTd, fulNameTd, createdAtTd, updatedAtTd, contactsTd, actionTd)
+  if (clientObj.contacts.length > 5) {
+    contactsBox.classList.add('contacts__box-item--wrap');
+  }
+
+  // console.log(contactsBox)
+
+  // Отрисовка списка контактов
+  clientObj.contacts.forEach((el) => {
+
+    let contactTypeName = 'Контакт';
+    switch (el.type) {
+      case "phone": contactTypeName = "Телефон"; break;
+      case "mail": contactTypeName = "Email"; break;
+      case "tg": contactTypeName = "Телеграм"; break;
+      case "vk": contactTypeName = "Вконтакте"; break;
+      case "fb": contactTypeName = "Фейсбук"; break;
+      default: contactTypeName = "Контакт"; break;
+    }
+
+    // Вместо элемента создаётся объект
+    const linkContact = $('<a>', {
+      href: el.value,
+      class: `${el.type} contacts__item`,
+      target: '_blank',
+      tooltip: `${contactTypeName}: ${el.value}`
+    });
+
+    contactsBox.append(linkContact[0]);
+  })
+
   return clientTr
 }
 
@@ -580,7 +419,7 @@ let clientsList = [];
 let contactCounter = 0;
 
 // Проверка наличия данных в LS
-clientsList = checkLocalServer();
+clientsList = checkLS();
 
 // открытие модального окна "Новый клиент"
 $('#addClientBtn').on("click", function () {
@@ -591,11 +430,9 @@ $('#addClientBtn').on("click", function () {
 $('.loader').removeClass("visually-hidden");
 setTimeout(() => {
   $('.loader').addClass("visually-hidden");
-  clientsList ? renderClientsList(clientsList) : checkLocalServer();
+  clientsList ? renderClientsList(clientsList) : checkLS();
 }, 2000);
 
-// Запуск функции поиска-фильтра
-$('#filterRequest').on('keyup', debounce(filterClients, 3000));
 
 // СОРТИРОВКА. События кликов на соответствующие колонки для сортировки
 let dir = true;
@@ -619,5 +456,7 @@ $('#tableChanges').on("click", function (event) {
   getSortClientsList('updatedAt');
 });
 
-
-
+export {
+  clientsList,
+  renderClientsList
+}
