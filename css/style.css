@@ -24,7 +24,9 @@ svg {
   --light-grey: #E7E5EB;
   --txt_grey: #B0B0B0;
   --grey: #d8d6dc;
-  --firm: #9873FF;
+  --firm-light: #c3daf4;
+  --firm: #206de8;
+  --firm-dark: #031098;
   --red: #F06A4D;
   --orange: #E6B127;
 }
@@ -35,6 +37,9 @@ body {
   font-family: 'Open Sans', sans-serif;
   text-align: center;
   background-color: #F5F5F5;
+  background-image: url(../img/background.jpg);
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .header {
@@ -62,10 +67,10 @@ body {
 .title {
   margin: 0;
   margin-bottom: 20px;
-  color: var(--black);
+  color: var(--firm-dark);
   font-size: 24px;
   font-weight: 700;
-  text-align: left;
+  text-align: center;
 }
 
 .container {
@@ -126,10 +131,18 @@ body {
   background-image: url(../img/add-contact-btn-2.svg);
 }
 
-.add-client-btn,
-.client-btn {
+.add-client-btn {
   color: var(--firm);
   border: 1px solid var(--firm);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.client-btn {
+  width: fit-content;
+  padding: 12.5px 35px;
+  color: #FFF;
+  border: 1px solid var(--firm);
+  background-color: var(--firm);
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
@@ -138,13 +151,18 @@ body {
 }
 
 .add-client-btn path {
+  fill: var(--firm);
   transition: fill 0.3s ease-in-out;
 }
 
-.add-client-btn:hover,
-.client-btn:hover {
-  background-color: #B89EFF;
+.add-client-btn:hover {
+  background-color: var(--firm);
   color: #FFF;
+}
+
+.client-btn:hover {
+  color: var(--firm);
+  background-color: #FFF;
 }
 
 .add-client-btn:hover path {
@@ -156,18 +174,18 @@ body {
   background-color: #8052FF;
 }
 
-.client-btn {
-  width: fit-content;
-  padding: 12.5px 35px;
-  color: #FFF;
-  background-color: var(--firm);
-}
-
 .delete-btn,
 .cancel-btn {
   font-weight: 400;
   padding: 5px 20px;
   text-decoration: underline;
+  color: var(--black);
+  transition: color 0.3s ease-in-out;
+}
+
+.delete-btn:hover,
+.cancel-btn:hover {
+  color: var(--firm);
 }
 
 .btn-box {
@@ -277,7 +295,7 @@ body {
   width: 100%;
   padding: 25px 30px;
   border-radius: 0;
-  background-color: #fff;
+  background-color: var(--firm-light);
 }
 
 .modal__title {
@@ -444,6 +462,8 @@ table {
   margin: 0 auto;
   margin-bottom: 40px;
   width: 100%;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .table__date {
@@ -471,7 +491,8 @@ th {
 
 .table-text {
   font-size: 14px;
-  color: var(--txt_grey);
+  color: var(--firm);
+  text-align: center;
 }
 
 .span-text {
