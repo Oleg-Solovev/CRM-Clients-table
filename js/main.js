@@ -8,17 +8,11 @@ $(document).ready()
 
 
 
-
-
-
-
-
 // Функция создания модальных окон
 function createModal(typeModal, clientObj = {}) {
 
   // Общие элементы для всех модальных окон
   const modalParent = components.createEl('div', 'modal__parent');
-  const modalWrapper = components.createEl('div', 'modal__wrapper');
   const modalFormWrapper = components.createEl('form', 'form');
   modalFormWrapper.autocomplete = 'off';
   const btnModalReset = components.createEl('button', 'btn-modal-reset');
@@ -32,8 +26,7 @@ function createModal(typeModal, clientObj = {}) {
   const formBtnBox = components.createEl('div', 'form__btn-box');
   const cancelBtn = components.createEl('button', 'cancel-btn', 'Отмена');
   modalFormWrapper.append(btnModalReset, modalTitle);
-  modalWrapper.append(modalFormWrapper);
-  modalParent.append(modalWrapper);
+  modalParent.append(modalFormWrapper);
   modalSpace.append(modalParent);
 
   // закрытие всех модальных окон
@@ -218,12 +211,14 @@ function getNewContact(obj = {}) {
     selectWrapper.classList.toggle('is-open');
   }
 
-  for (let i = 0; i < contactsTypeArr.length; i++) {
-    const option = components.createEl('option', 'option-contact', contactsTypeArr[i].text);
-    option.value = contactsTypeArr[i].value;
+  contactsTypeArr.forEach((el) => {
+    const option = components.createEl('option', 'option-contact', el.text);
+    option.value = el.value;
     select.append(option);
-  }
+  })
   selectWrapper.append(select);
+  const selectText = contactsTypeArr.find(el => el.value === obj.type).text
+  console.log(selectText)
 
   // создание инпута
   const input = components.createEl('input', 'input-contact');
@@ -237,10 +232,12 @@ function getNewContact(obj = {}) {
   // инициализация библиотеки choices
   const choice = new Choices(select, {
     searchEnabled: false,
+    // itemSelectText: selectText,
     itemSelectText: '',
     shouldSort: false,
     allowHTML: true,
   });
+
 
   // удаление строки контакта
   deleteContactBtn.onclick = function () {

@@ -149,6 +149,28 @@ function checkLS() {
                     }
                 ]
             },
+            {
+                id: Math.round(Math.random() * 1000),
+                name: 'Иванов',
+                surname: 'Михаил',
+                lastName: 'Александрович',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                contacts: [
+                    {
+                        type: 'phone',
+                        value: '+2558463155'
+                    },
+                    {
+                        type: 'mail',
+                        value: 'dfgsd@bk.ru'
+                    },
+                    {
+                        type: 'vk',
+                        value: 'https://vk.com/id20dssvdv'
+                    }
+                ]
+            },
         ];
         // сохранение первоначального массива пользователей на сервер
         saveInLS('clientsArr', clientsList);
